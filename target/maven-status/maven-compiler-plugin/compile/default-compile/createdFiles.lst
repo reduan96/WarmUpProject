@@ -2,10 +2,12 @@ com\proyecto\app\services\UserService.class
 com\proyecto\app\securityConfig\WebSecurityConfig.class
 com\proyecto\app\classes\LoginForm.class
 com\proyecto\app\classes\RegisterForm.class
+com\proyecto\app\Repositories\RutinaRepository.class
 com\proyecto\app\services\warmUpServices.class
-com\proyecto\app\entities\Rutinas.class
+com\proyecto\app\model\Usuarios.class
+com\proyecto\app\Repositories\UsuarioRepository.class
+com\proyecto\app\classes\RoutineForm.class
+com\proyecto\app\model\Rutinas.class
 com\proyecto\app\classes\CustomUserDetails.class
 com\proyecto\app\ProyectoWarmUpApplication.class
-com\proyecto\app\Repositories\UsuariosRepository.class
 com\proyecto\app\controllers\warmUpController.class
-com\proyecto\app\entities\Usuarios.class

@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.proyecto.app.Repositories.RutinasRepository;
-import com.proyecto.app.Repositories.UsuariosRepository;
-import com.proyecto.app.entities.Rutinas;
-import com.proyecto.app.entities.Usuarios;
+import com.proyecto.app.Repositories.RutinaRepository;
+import com.proyecto.app.Repositories.UsuarioRepository;
+import com.proyecto.app.model.Rutinas;
+import com.proyecto.app.model.Usuarios;
 
 @Service
 public class warmUpServices {
 
 	@Autowired
-	private UsuariosRepository usuariosRepo;
+	private UsuarioRepository usuariosRepo;
 
 	@Autowired
-	private RutinasRepository rutinasRepo;
+	private RutinaRepository rutinasRepo;
 
 	// Function to check user if it is present on DB via email and password
 	public boolean checkUser(String email, String clave) {
@@ -27,24 +27,20 @@ public class warmUpServices {
 		Optional<Usuarios> usuario = usuariosRepo.checkUser(email, clave);
 
 		if (usuario.isEmpty()) {
-
 			return false;
 		} else {
-
 			return true;
 		}
 	}
 
 	// Function to check user if it is present on DB via Id User
-	public boolean checkUser(Long idUsuario) {
+	public boolean checkUser(String idUsuario) {
 
 		Optional<Usuarios> usuario = usuariosRepo.findById(idUsuario);
 
 		if (usuario.isEmpty()) {
-
 			return false;
 		} else {
-
 			return true;
 		}
 	}
@@ -52,13 +48,11 @@ public class warmUpServices {
 	// Function to check if the email is present on DB
 	public boolean checkEmail(String email) {
 
-		Optional<Usuarios> usuario = usuariosRepo.checkMail(email);
+		Optional<Usuarios> usuario = usuariosRepo.checkEmail(email);
 
 		if (usuario.isEmpty()) {
-
 			return false;
 		} else {
-
 			return true;
 		}
 	}
@@ -81,7 +75,7 @@ public class warmUpServices {
 	 */
 
 	// Function to save the routine's user
-	public void registerRoutine(Long idUsuario, String nombre, String descripcion, String lunes, String martes,
+	public void registerRoutine(String idUsuario, String nombre, String descripcion, String lunes, String martes,
 			String miercoles, String jueves, String viernes, String sabado, String domingo) {
 
 		Timestamp ts = Timestamp.from(Instant.now());

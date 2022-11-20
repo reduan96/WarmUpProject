@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class RoutineForm {
 
-	private Long idUsuario; 
+	private String idUsuario; 
 	private String nombre;
 	private String descripcion; 
 	private String lunes;

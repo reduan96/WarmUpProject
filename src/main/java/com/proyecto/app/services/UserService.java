@@ -7,14 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.proyecto.app.Repositories.UsuariosRepository;
+import com.proyecto.app.Repositories.UsuarioRepository;
 import com.proyecto.app.classes.CustomUserDetails;
-import com.proyecto.app.entities.Usuarios;
+import com.proyecto.app.model.Usuarios;
 
 public class UserService implements UserDetailsService {
 
 	@Autowired
-	private UsuariosRepository usuarioRepo;
+	private UsuarioRepository usuarioRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

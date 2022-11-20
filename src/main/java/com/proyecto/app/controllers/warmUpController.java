@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.proyecto.app.Repositories.RutinasRepository;
+import com.proyecto.app.Repositories.RutinaRepository;
 import com.proyecto.app.classes.RegisterForm;
 import com.proyecto.app.classes.RoutineForm;
 import com.proyecto.app.services.warmUpServices;
@@ -22,7 +22,7 @@ public class warmUpController {
 	private warmUpServices wUpService;
 
 	@Autowired
-	private RutinasRepository rutinasRepo;
+	private RutinaRepository rutinasRepo;
 
 	/*
 	 * ${#request.userPrincipal.principal.email}
@@ -103,7 +103,7 @@ public class warmUpController {
 	@PostMapping("/altaRutina")
 	public String registerRoutine(RoutineForm routineForm, Model model) {
 
-		Long idUsuario = routineForm.getIdUsuario();
+		String idUsuario = routineForm.getIdUsuario();
 		String nombre = routineForm.getNombre();
 		String descripcion = routineForm.getDescripcion();
 		String lunes = routineForm.getLunes();

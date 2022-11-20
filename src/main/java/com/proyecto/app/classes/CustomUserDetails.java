@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.proyecto.app.entities.Usuarios;
+import com.proyecto.app.model.Usuarios;
 
 public class CustomUserDetails implements UserDetails{
 
@@ -34,7 +34,7 @@ public class CustomUserDetails implements UserDetails{
 	        return user.getEmail();
 	    }
 	    
-	    public Long getIdUser() {
+	    public String getIdUser() {
 	    	
 	    	return user.getIdUsuario();
 	    }
