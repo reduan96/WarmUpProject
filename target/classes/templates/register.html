@@ -1,0 +1,73 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<title>WarmUp</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body class="img js-fullheight" style="background-image: url(images/login.jpg);">
+	<section class="ftco-section p-0">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+						<h3 class="mb-4 text-center">Regístrese en WARM-UP</h3>
+						<p th:if="${invalidCredentialsReg}" style="color: red;text-align: center;font-weight: bold;">Este email ya esta registrado</p>
+						<p th:if="${invalidCredentialsRegClave}" style="color: red;text-align: center;font-weight: bold;">Las contraseñas no coinciden</p>
+						<p th:if="${registerSuccessful}" style="color: green;text-align: center;font-weight: bold;">Usted esta registrado correctamente, inicie sesion</p>
+						<form th:action="@{/registerUser}" th:object="${registerForm}" method="post" class="signin-form">
+							<div class="form-group">
+								<input name="nombre" type="text" class="form-control" placeholder="nombre" required>
+							</div>
+							<div class="form-group">
+								<input name="apellidos" type="text" class="form-control" placeholder="apellidos" required>
+							</div>
+							<div class="form-group">
+								<input name="email" type="email" class="form-control" placeholder="email" required>
+							</div>
+							<div class="form-group">
+								<input name=clave id="password-field" type="password" class="form-control" placeholder="contraseña" required>
+								<span toggle="#password-field"
+									class="fa fa-fw fa-eye field-icon toggle-password"></span>
+							</div>
+							<div class="form-group">
+								<input name=repClave id="password-field" type="password" class="form-control" placeholder="repita su contraseña" required>
+								<span toggle="#password-field"
+									class="fa fa-fw fa-eye field-icon toggle-password"></span>
+							</div>
+							<div class="w-100">
+								<label class="checkbox-wrap checkbox-primary">Acepto los terminos y condiciones.
+									<input type="checkbox" checked required>
+									<span class="checkmark"></span>
+								</label>
+							</div>
+							<div class="w-100 text-md-center p-1">
+									<a th:href="@{/}" style="color: #fff">Volver al inicio de sesión</a>
+								</div>
+							<div class="form-group">
+								<button type="submit" class="form-control btn submit px-3">Registrarme</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+
+</body>
+
+</html>
