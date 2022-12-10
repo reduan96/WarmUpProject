@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<title>WarmUp - mis rutinas</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<style>
+		input:checked + label {
+    		background: red;
+		}
+		input {
+    		visibility:hidden;
+		}
+		label {
+    		cursor: pointer;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Menu de navegacion -->
+	<nav class="navbar navbar-expand-xl navbar-white bg-white align-items-end">
+		<img alt="logo" src="images/logo.png" style="max-width: 30%;" class="img-fluid">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03"
+			aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="fa fa-bars" style="font-size: 2rem"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarsExample03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link text-dark" th:href="@{/}"
+						style="font-size: 1.3rem;">Inicio<span class="sr-only">(current)</span></a></li>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/rutinas}"
+						style="font-size: 1.3rem;">Rutinas</a></li>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/entrenadores}"
+						style="font-size: 1.3rem;">Entrenadores</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark" th:href="@{/tienda}" style="font-size:1.3rem;">Tienda</a>
+				</li>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/alta}" style="font-size: 1.3rem;">Pro</a>
+				</li>
+				<li class="nav-item dropdown mb-2"><a class="nav-link dropdown-toggle text-dark"
+						href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false" style="font-size: 1.3rem;">Mi perfil</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown03">
+						<a class="dropdown-item text-dark" th:href="@{/misRutinas}"
+							style="font-size: 1.3rem;">Mis Rutinas</a>
+						<a class="dropdown-item text-dark" th:href="@{/config}"
+							style="font-size: 1.3rem;">Configuración</a>
+						<form th:action="@{/logout}" method=post>
+							<button class="dropdown-item text-dark" style="font-size: 1.3rem;">Cerrar sesión</button>
+						</form>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<!-- Menu de navegacion -->
+	</nav>
+	<div class="w-100 justify-content-left bg-white">
+		<p class="m-0 p-0 pl-4" style="font-weight: bold; font-size: 1.4rem; color: black">WARM-UP</p>
+	</div>
+
+	<!-- Mensaje -->
+	<div class="w-100 d-flex bg-white justify-content-center">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
+			th:if="${mensaje != null}"
+	     	th:text="${mensaje}"
+	     	class="alert">
+		</div>
+	</div>
+
+	<!-- Cuerpo -->
+	<div class="d-flex flex-wrap justify-content-around align-items-center p-1 bg-white">
+		<form class="p-2" th:action="@{/subirRutina}" method="get">
+			<button class="btn btn-light btn-lg">Subir rutina</button>
+		</form>
+	</div>
+
+	<div class="d-flex flex-wrap bg-white">
+
+		<div class="w-50 card-deck bg-white m-0 p-0" th:each="rutina : ${rutinas}">
+			<div class="card m-2 p-0" style="text-align: center;">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${rutina.nombre}"></h5>
+					<p class="card-text" style="color:black;" th:text="${rutina.descripcion}"></p>
+					<form th:action="@{/editarRutinas}" method=get>
+						<button class="btn btn-light btn-lg m-2">Editar rutina</button>
+						<input type="hidden" name="idRutina" id="idRutina" th:value="${rutina.idRutina}" />
+					</form>
+					<button class="btn btn-light btn-lg m-2" data-toggle="modal" data-target="#exampleModalCenter">Borrar rutina</button>
+				</div>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			       	Seguro que quieres borrar esta rutina ?
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+			        <form th:action="@{/borrarRutina}" method=get>
+			        	<button class="btn btn-danger">Si</button>
+			        	<input type="hidden" name="idRutina" id="idRutina" th:value="${rutina.idRutina}" />
+			        </form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Cuerpo -->
+
+	<!-- Footer -->
+	<div class="footer-basic" style="color: black;">
+		<footer>
+			<div class="social">
+				<a href="#"><i class="icon ion-social-instagram"></i></a> <a href="#"><i
+						class="icon ion-social-twitter"></i></a> <a href="#"><i
+						class="icon ion-social-facebook"></i></a>
+			</div>
+			<p class="copyright">Warm Up © 2022</p>
+		</footer>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+
+</html>

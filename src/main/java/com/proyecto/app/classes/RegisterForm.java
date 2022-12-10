@@ -2,9 +2,11 @@ package com.proyecto.app.classes;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RegisterForm {
 
 	private String nombre;
@@ -12,9 +14,5 @@ public class RegisterForm {
 	private String email;
 	private String clave;
 	private String repClave;
-	
-	public RegisterForm() {
-		super();
-	}
 	
 }

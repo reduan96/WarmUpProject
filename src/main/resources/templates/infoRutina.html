@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<title>WarmUp - info rutina</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<!-- Menu de navegacion -->
+	<nav class="navbar navbar-expand-xl navbar-white bg-white align-items-end">
+		<img alt="logo" src="images/logo.png" style="max-width: 30%;" class="img-fluid">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03"
+			aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="fa fa-bars" style="font-size: 2rem"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarsExample03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link text-dark" th:href="@{/}"
+						style="font-size: 1.3rem;">Inicio<span class="sr-only">(current)</span></a></li>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/rutinas}"
+						style="font-size: 1.3rem;">Rutinas</a></li>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/entrenadores}"
+						style="font-size: 1.3rem;">Entrenadores</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark" th:href="@{/tienda}" style="font-size:1.3rem;">Tienda</a>
+				</li>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/alta}" style="font-size: 1.3rem;">Pro</a>
+				</li>
+				<li class="nav-item dropdown mb-2"><a class="nav-link dropdown-toggle text-dark"
+						href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false" style="font-size: 1.3rem;">Mi perfil</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown03">
+						<a class="dropdown-item text-dark" th:href="@{/misRutinas}"
+							style="font-size: 1.3rem;">Mis Rutinas</a>
+						<a class="dropdown-item text-dark" th:href="@{/config}"
+							style="font-size: 1.3rem;">Configuración</a>
+						<form th:action="@{/logout}" method=post>
+							<button class="dropdown-item text-dark" style="font-size: 1.3rem;">Cerrar sesión</button>
+						</form>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<!-- Menu de navegacion -->
+	</nav>
+	<div class="w-100 justify-content-left bg-white">
+		<p class="m-0 p-0 pl-4" style="font-weight: bold; font-size: 1.4rem; color: black">WARM-UP</p>
+	</div>
+	
+	<!-- Mensaje -->
+		<div class="w-100 d-flex bg-white justify-content-center">
+			<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
+				th:if="${mensaje != null}"
+		     	th:text="${mensaje}"
+		     	class="alert">
+			</div>
+		</div>
+	
+	<!-- Cuerpo -->
+	<div class="d-flex flex-wrap justify-content-around align-items-center p-1 bg-white">
+		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
+			<h5 th:text="${rutina.get.nombre}"></h5>
+		</div>
+		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1">
+			<p style="color:black" th:text="${rutina.get.descripcion}"></p>
+		</div>
+		
+		<div class="w-75 justify-content-center text-center">
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">LUNES</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.lunes}"></p>
+			  </div>
+			</div>
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">MARTES</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.martes}"></p>
+			  </div>
+			</div>
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">MIERCOLES</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.miercoles}"></p>
+			  </div>
+			</div>
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">JUEVES</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.jueves}"></p>
+			  </div>
+			</div>
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">VIERNES</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.viernes}"></p>
+			  </div>
+			</div>
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">SABADO</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.sabado}"></p>
+			  </div>
+			</div>
+			<div class="card bg-white mb-1">
+			  <div class="card-header font-weight-bold">DOMINGO</div>
+			  <div class="card-body">
+			    <p class="card-text" th:text="${rutina.get.domingo}"></p>
+			  </div>
+			</div>
+		</div>
+		
+		<div class="w-75 justify-content-center text-center">
+			<h5 class="mt-5">COMENTARIOS</h5>
+			<form th:action="@{/aniadirComentarioRutina}" method="post" class="p-2 mt-2 mb-5" style="border-radius: 5px; border:1px solid black;">
+				<input type="hidden" name="idUsuario" th:value="${#request.userPrincipal.principal.idUser}" />
+				<input type="hidden" name="idRutina" th:value="${rutina.get.idRutina}" />
+				<label for="punt" class="font-weight-bold text-dark">Puntuacion(1 al 10)</label>
+				<select name="puntuacion" id="punt">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5" selected>5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+				<h5>Añade tu comentario</h5>
+				<textarea class="w-100 bg-white" name="comentario" rows="4" cols="50" required></textarea>
+				<button class="btn btn-light btn-lg m-2">Añadir</button>
+			</form>
+		</div>
+		
+		<!-- Listar comentario propio -->
+		<div class="w-75 card-deck bg-white m-0 p-0" th:each="coment : ${comentario}">
+			<div class="card m-2 p-0" style="text-align: center;">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${coment.puntuacion}">Puntuacion</h5>
+					<p class="card-text" style="color:black;" th:text="${coment.comentario}"></p>
+					<button class="btn btn-light btn-lg m-2" data-toggle="modal" data-target="#exampleModalCenter">Borrar comentario</button>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Listar comentarios -->
+		<div class="w-75 card-deck bg-white m-0 p-0" th:each="comentario : ${comentarios}">
+			<div class="card m-2 p-0" style="text-align: center;">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${comentario.puntuacion}">Puntuacion</h5>
+					<p class="card-text" style="color:black;" th:text="${comentario.comentario}"></p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="w-100 d-flex justify-content-center bg-white">
+			<form th:action="@{/rutinas}" method="get"><button class="btn btn-light btn-lg m-2">Volver</button></form>
+		</div>
+		
+	</div>
+	<!-- Cuerpo -->
+	
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				    	<span aria-hidden="true">&times;</span>
+				    </button>
+				    </div>
+				    <div class="modal-body">
+				    	Seguro que quieres borrar este comentario ?
+				    </div>
+				    <div class="modal-footer">
+				      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+				      <form th:action="@{/borrarComentario}" method=get>
+				      	<button class="btn btn-danger">Si</button>
+						<input type="hidden" name="idRutina" th:value="${rutina.get.idRutina}" />
+				      </form>
+				    </div>
+				  </div>
+				</div>
+			</div>
+		</div>
+
+	<!-- Footer -->
+	<div class="footer-basic" style="color: black;">
+		<footer>
+			<div class="social">
+				<a href="#"><i class="icon ion-social-instagram"></i></a> <a href="#"><i
+						class="icon ion-social-twitter"></i></a> <a href="#"><i
+						class="icon ion-social-facebook"></i></a>
+			</div>
+			<p class="copyright">Warm Up © 2022</p>
+		</footer>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+
+</html>
