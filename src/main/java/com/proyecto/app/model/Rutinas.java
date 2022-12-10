@@ -1,5 +1,6 @@
 package com.proyecto.app.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -15,6 +16,7 @@ public class Rutinas {
 
 	@Id
 	private String idRutina;
+	
 	private String idUsuario;
 	private String nombre;
 	private String descripcion;
@@ -27,6 +29,7 @@ public class Rutinas {
 	private String domingo;
 	private Date fechaSubida;
 	private Date fechaElim;
+	private ArrayList<Comentarios> comentarios;
 	
 	public Rutinas(String idUsuario, String nombre, String descripcion, String lunes, String martes, String miercoles,
 			String jueves, String viernes, String sabado, String domingo, Date fechaSubida, Date fechaElim) {

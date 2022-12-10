@@ -1,7 +1,10 @@
 com\proyecto\app\services\UserService.class
 com\proyecto\app\securityConfig\WebSecurityConfig.class
+com\proyecto\app\classes\CommentForm.class
 com\proyecto\app\classes\LoginForm.class
+com\proyecto\app\Repositories\ComentarioRepository.class
 com\proyecto\app\classes\RegisterForm.class
+com\proyecto\app\model\Comentarios.class
 com\proyecto\app\Repositories\RutinaRepository.class
 com\proyecto\app\services\warmUpServices.class
 com\proyecto\app\model\Usuarios.class
