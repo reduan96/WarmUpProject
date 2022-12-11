@@ -28,9 +28,6 @@
 				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/entrenadores}"
 						style="font-size: 1.3rem;">Entrenadores</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link text-dark" th:href="@{/tienda}" style="font-size:1.3rem;">Tienda</a>
-				</li>
 				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}" style="font-size: 1.3rem;">Pro</a>
 				</li>
 				<li class="nav-item dropdown mb-2"><a class="nav-link dropdown-toggle text-dark"
@@ -66,13 +63,13 @@
 	<!-- Cuerpo -->
 	<div class="d-flex flex-wrap justify-content-around align-items-center p-1 bg-white">
 		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
-			<h5 th:text="${rutina.get.nombre}"></h5>
+			<h4 th:text="${rutina.get.nombre}"></h4>
 		</div>
-		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1">
-			<p style="color:black" th:text="${rutina.get.descripcion}"></p>
+		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
+			<h5 th:text="${rutina.get.descripcion}"></h5>
 		</div>
 		
-		<div class="w-75 justify-content-center text-center">
+		<div class="w-75 justify-content-center text-center" style="color:black;">
 			<div class="card bg-white mb-1">
 			  <div class="card-header font-weight-bold">LUNES</div>
 			  <div class="card-body">
@@ -119,10 +116,11 @@
 		
 		<div class="w-75 justify-content-center text-center">
 			<h5 class="mt-5">COMENTARIOS</h5>
-			<form th:action="@{/aniadirComentarioRutina}" method="post" class="p-2 mt-2 mb-5" style="border-radius: 5px; border:1px solid black;">
+			<div class="shadow p-3 m-3 bg-white rounded">
+			<form th:action="@{/aniadirComentarioRutina}" method="post" class="p-2 mt-2 mb-5">
 				<input type="hidden" name="idUsuario" th:value="${#request.userPrincipal.principal.idUser}" />
 				<input type="hidden" name="idRutina" th:value="${rutina.get.idRutina}" />
-				<label for="punt" class="font-weight-bold text-dark">Puntuacion(1 al 10)</label>
+				<label for="punt" class="font-weight-bold text-dark">PUNTUA LA RUTINA (1 al 10)</label>
 				<select name="puntuacion" id="punt">
 					<option value="1">1</option>
 					<option value="2">2</option>
@@ -136,16 +134,19 @@
 					<option value="10">10</option>
 				</select>
 				<h5>Añade tu comentario</h5>
-				<textarea class="w-100 bg-white" name="comentario" rows="4" cols="50" required></textarea>
+				<textarea class="w-100 bg-white" name="comentario" rows="4" cols="50" required style="border-radius: 5px;"></textarea>
 				<button class="btn btn-light btn-lg m-2">Añadir</button>
 			</form>
+			</div>
 		</div>
 		
 		<!-- Listar comentario propio -->
-		<div class="w-75 card-deck bg-white m-0 p-0" th:each="coment : ${comentario}">
-			<div class="card m-2 p-0" style="text-align: center;">
+		<div class="w-75 shadow p-3 m-3 bg-white rounded text-dark" th:each="coment : ${comentario}">
+			<div class="m-2 p-0" style="text-align: center;">
 				<div class="card-body">
-					<h5 class="card-title" th:text="${coment.puntuacion}">Puntuacion</h5>
+					<p style="display:inline">TU PUNTUACION: </p>
+					<p th:text="${coment.puntuacion}" style="display:inline"></p><p style="display:inline">/10</p>
+					<p style="color:black;">TU COMENTARIO:</p>
 					<p class="card-text" style="color:black;" th:text="${coment.comentario}"></p>
 					<button class="btn btn-light btn-lg m-2" data-toggle="modal" data-target="#exampleModalCenter">Borrar comentario</button>
 				</div>
@@ -153,10 +154,12 @@
 		</div>
 		
 		<!-- Listar comentarios -->
-		<div class="w-75 card-deck bg-white m-0 p-0" th:each="comentario : ${comentarios}">
-			<div class="card m-2 p-0" style="text-align: center;">
+		<div class="w-75 shadow p-3 m-3 bg-white rounded text-dark" th:each="comentario : ${comentarios}">
+			<div class="m-2 p-0" style="text-align: center;">
 				<div class="card-body">
-					<h5 class="card-title" th:text="${comentario.puntuacion}">Puntuacion</h5>
+				<p style="display:inline">PUNTUACION DADA: </p>
+					<p  style="display:inline" class="card-title" th:text="${comentario.puntuacion}"></p><p style="display:inline">/10</p>
+					<p style="color:black;">COMENTARIO:</p>
 					<p class="card-text" style="color:black;" th:text="${comentario.comentario}"></p>
 				</div>
 			</div>
