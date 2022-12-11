@@ -343,14 +343,45 @@ public class warmUpController {
 		return REDIRECT + "/infoRutina";
 	}
 
+	
 	/*
 	 * Trainers controllers >>>
 	 */
 
-	// Trainers controllers
+	// Trainers controller
 	@GetMapping("/entrenadores")
 	public String showTrainers() {
 
 		return "entrenadores";
 	}
+	
+	
+	/*
+	 * Pro controllers >>>
+	 */
+	
+	// Pro controller
+	@GetMapping("/altaPro")
+	public String showPro() {
+		
+		return "pro";
+	}
+	
+	// Payment controller
+	@GetMapping("/pago")
+	public String showProPayment() {
+		
+		return "pasarelaPago";
+	}
+	
+	// Payment finished controller
+	@GetMapping("/pagoRealizado")
+	public String paymentFinished(RedirectAttributes redirectAttrs) {
+		
+		redirectAttrs
+		.addFlashAttribute("mensaje", "Pago realizado correctamente, ya es entrenador!")
+        .addFlashAttribute("clase", "success");
+		return REDIRECT + "/rutinas";
+	}
+	
 }
