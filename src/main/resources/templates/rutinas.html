@@ -4,20 +4,29 @@
 <head>
 	<meta charset="utf-8">
 	<title>WarmUp - rutina</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	<link rel="stylesheet" href="css/style.css">
 	<style>
-		input:checked + label {
-    		background: red;
+		input:checked+label {
+			background: red;
 		}
+
 		input {
-    		visibility:hidden;
+			visibility: hidden;
 		}
+
 		label {
-    		cursor: pointer;
+			cursor: pointer;
+		}
+
+		@media only screen and (min-width : 480px) {
+
+			#mainCont {
+				color: red;
+			}
 		}
 	</style>
 </head>
@@ -39,17 +48,15 @@
 				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/entrenadores}"
 						style="font-size: 1.3rem;">Entrenadores</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link text-dark" th:href="@{/tienda}" style="font-size:1.3rem;">Tienda</a>
-				</li>
-				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}" style="font-size: 1.3rem;">Pro</a>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}"
+						style="font-size: 1.3rem;">Pro</a>
 				</li>
 				<li class="nav-item dropdown mb-2"><a class="nav-link dropdown-toggle text-dark"
 						href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true"
 						aria-expanded="false" style="font-size: 1.3rem;">Mi perfil</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown03">
-						<a class="dropdown-item text-dark" th:href="@{/misRutinas}"
-							style="font-size: 1.3rem;">Mis Rutinas</a>
+						<a class="dropdown-item text-dark" th:href="@{/misRutinas}" style="font-size: 1.3rem;">Mis
+							Rutinas</a>
 						<a class="dropdown-item text-dark" th:href="@{/config}"
 							style="font-size: 1.3rem;">Configuración</a>
 						<form th:action="@{/logout}" method=post>
@@ -64,39 +71,36 @@
 	<div class="w-100 justify-content-left bg-white">
 		<p class="m-0 p-0 pl-4" style="font-weight: bold; font-size: 1.4rem; color: black">WARM-UP</p>
 	</div>
-	
+
 	<!-- Mensaje -->
 	<div class="w-100 d-flex bg-white justify-content-center">
-		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
-			th:if="${mensaje != null}"
-	     	th:text="${mensaje}"
-	     	class="alert">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
 		</div>
 	</div>
-	
+
 	<!-- Cuerpo -->
-	<div class="d-flex flex-wrap justify-content-around align-items-center p-1 bg-white">
-		<form class="p-2" th:action="@{/subirRutina}" method="get">
-			<button class="btn btn-light btn-lg">Subir rutina</button>
-		</form>
+	<div class="d-flex flex-wrap justify-content-center p-2 bg-white">
+			<h3>BUSCA LA RUTINA QUE MAS TE GUSTE</h3>
 	</div>
 
-	<div class="d-flex flex-wrap bg-white">
-
-		<div class="w-50 card-deck bg-white m-0 p-0" th:each="rutina : ${rutinas}">
-			<div class="card m-2 p-0" style="text-align: center;">
-				<div class="card-body">
-					<h5 class="card-title" th:text="${rutina.nombre}"></h5>
-					<p class="card-text" style="color:black;" th:text="${rutina.descripcion}"></p>
-					<form th:action="@{/infoRutina}" method=get>
-						<button class="btn btn-light btn-lg m-2">Más info</button>
-						<input type="hidden" name="idRutina" id="idRutina" th:value="${rutina.idRutina}" />
-					</form>
+	<div class="bg-white w-100">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg text-center shadow p-3 m-3 bg-white rounded" th:each="rutina : ${rutinas}">
+				<div class="m-2 p-0" style="text-align: center;">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${rutina.nombre}"></h5>
+						<p class="card-text" style="color:black;" th:text="${rutina.descripcion}"></p>
+						<form th:action="@{/infoRutina}" method=get>
+							<button class="btn btn-light btn-lg m-2">Más info</button>
+							<input type="hidden" name="idRutina" id="idRutina" th:value="${rutina.idRutina}" />
+						</form>
+					</div>
 				</div>
-				
 			</div>
 		</div>
-
+	</div>
 	</div>
 
 	<!-- Cuerpo -->
