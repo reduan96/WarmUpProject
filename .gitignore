@@ -1,0 +1,4 @@
+
+*.class
+target/classes/com/proyecto/app/controllers/warmUpController.class
+target/classes/META-INF/MANIFEST.MF
