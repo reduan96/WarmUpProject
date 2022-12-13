@@ -28,23 +28,22 @@ import com.proyecto.app.services.WarmUpServices;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @Controller
 public class RoutinesController {
-	
+
 	@Autowired
 	private WarmUpServices wUpService;
 
 	@Autowired
 	private RutinaRepository rutinasRepo;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepo;
-	
+
 	@Autowired
 	private ComentarioRepository comentRepo;
-	
+
 	private static final String REDIRECT = "redirect:";
 
 	/*
@@ -69,12 +68,11 @@ public class RoutinesController {
 	// Register routine's user and if we have
 	// a routine, edit it
 	@PostMapping("/altaRutina")
-	public String registerRoutine(HttpServletRequest request, 
-			RoutineForm routineForm, Model model, 
+	public String registerRoutine(HttpServletRequest request, RoutineForm routineForm, Model model,
 			RedirectAttributes redirectAttrs) {
 
 		String idRutina = request.getParameter("idRutina");
-		
+
 		String idUsuario = routineForm.getIdUsuario();
 		String nombre = routineForm.getNombre();
 		String descripcion = routineForm.getDescripcion();
@@ -92,21 +90,19 @@ public class RoutinesController {
 
 		if (flag) {
 
-			if(idRutina != null) {
-				
-				wUpService.editRoutine(idRutina, nombre, descripcion, lunes, martes, miercoles, jueves, viernes, 
-						sabado, domingo);
-				redirectAttrs
-				.addFlashAttribute("mensaje", "Rutina editada correctamente")
-	            .addFlashAttribute("clase", "success");
+			if (idRutina != null) {
+
+				wUpService.editRoutine(idRutina, nombre, descripcion, lunes, martes, miercoles, jueves, viernes, sabado,
+						domingo);
+				redirectAttrs.addFlashAttribute("mensaje", "Rutina editada correctamente").addFlashAttribute("clase",
+						"success");
 				return REDIRECT + "/misRutinas";
 			}
-			
+
 			wUpService.registerRoutine(idUsuario, nombre, descripcion, lunes, martes, miercoles, jueves, viernes,
 					sabado, domingo);
-			redirectAttrs
-			.addFlashAttribute("mensaje", "Rutina añadida correctamente")
-            .addFlashAttribute("clase", "success");
+			redirectAttrs.addFlashAttribute("mensaje", "Rutina añadida correctamente").addFlashAttribute("clase",
+					"success");
 			return REDIRECT + "/rutinas";
 		} else {
 
@@ -114,29 +110,46 @@ public class RoutinesController {
 			return "login";
 		}
 	}
-	
+
 	// Info Routine, where we can see the routine
 	// itself and the users comments
 	@GetMapping("/infoRutina")
 	public String infoRoutine(HttpServletRequest request, Model model,
-			@CookieValue(name = "idRutina", defaultValue = "") String idRutinaCookie,
-			RedirectAttributes redirectAttrs, HttpServletResponse response) {
-		
-		if(idRutinaCookie != null && !"".equals(idRutinaCookie)) {
-			
+			@CookieValue(name = "idRutina", defaultValue = "") String idRutinaCookie, RedirectAttributes redirectAttrs,
+			HttpServletResponse response) {
+
+		if (idRutinaCookie != null && !"".equals(idRutinaCookie)) {
+
 			log.info("VALOR idRutinaCookie: " + idRutinaCookie);
 			model.addAttribute("rutina", rutinasRepo.findById(idRutinaCookie));
 			String idUsuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName()).get().getIdUsuario();
-			Optional <Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutinaCookie);
-			if(comentarioPropio.isPresent()) {
-				
+			Optional<Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutinaCookie);
+			if (comentarioPropio.isPresent()) {
+
 				model.addAttribute("comentario", comentarioPropio.get());
 			}
-			List <Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutinaCookie);
+
+			List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutinaCookie);
+
+			if (!comentarios.isEmpty()) {
+
+				Integer sumTotalPuntuaciones = 0;
+				for (Comentarios puntComent : comentarios) {
+
+					sumTotalPuntuaciones += Integer.valueOf(puntComent.getPuntuacion());
+				}
+
+				Double mediaPuntuaciones = (double) (sumTotalPuntuaciones / comentarios.size());
+				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
+			}else {
+				
+				model.addAttribute("mediaPuntuacion", "Aun sin puntuación");
+			}
+
 			List<Comentarios> comentariosDist = new ArrayList<>();
 			for (Comentarios comentarioDist : comentarios) {
-				
-				if(!comentarioDist.getIdUsuario().equals(idUsuario)) {
+
+				if (!comentarioDist.getIdUsuario().equals(idUsuario)) {
 					comentariosDist.add(comentarioDist);
 				}
 			}
@@ -145,42 +158,57 @@ public class RoutinesController {
 			cookie.setPath("/");
 			cookie.setMaxAge(0);
 			response.addCookie(cookie);
-			redirectAttrs
-			.addFlashAttribute("mensaje", "Comentario añadido correctamente")
-	        .addFlashAttribute("clase", "success");
+			redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
+					"success");
 			return "infoRutina";
-		}else {
-			
+		} else {
+
 			String idRutina = request.getParameter("idRutina");
 			log.info("VALOR idRutina: " + idRutina);
 			model.addAttribute("rutina", rutinasRepo.findById(idRutina));
 			String idUsuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName()).get().getIdUsuario();
-			Optional <Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
-			if(comentarioPropio.isPresent()) {
-				
+			Optional<Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
+			if (comentarioPropio.isPresent()) {
+
 				model.addAttribute("comentario", comentarioPropio.get());
 			}
-			List <Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
+			List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
+
+			if (!comentarios.isEmpty()) {
+
+				Integer sumTotalPuntuaciones = 0;
+				for (Comentarios puntComent : comentarios) {
+
+					sumTotalPuntuaciones += Integer.valueOf(puntComent.getPuntuacion());
+				}
+
+				Double mediaPuntuaciones = (double) (sumTotalPuntuaciones / comentarios.size());
+				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
+			}else {
+				
+				model.addAttribute("mediaPuntuacion", "Se el primero !");
+			}
+
 			List<Comentarios> comentariosDist = new ArrayList<>();
 			for (Comentarios comentarioDist : comentarios) {
-				
-				if(!comentarioDist.getIdUsuario().equals(idUsuario)) {
+
+				if (!comentarioDist.getIdUsuario().equals(idUsuario)) {
 					comentariosDist.add(comentarioDist);
 				}
 			}
 			model.addAttribute("comentarios", comentariosDist);
 			return "infoRutina";
 		}
-		
+
 	}
-	
+
 	// My routines
 	@GetMapping("/misRutinas")
 	public String myRoutines(Model model, Principal principal) {
-		
+
 		String emailUsuario = principal.getName();
 		Optional<Usuarios> obj = usuarioRepo.findByEmail(emailUsuario);
-		if(obj.isEmpty()) {
+		if (obj.isEmpty()) {
 			log.info("El usuario no se haya en la base de datos");
 			return null;
 		}
@@ -188,70 +216,63 @@ public class RoutinesController {
 		model.addAttribute("rutinas", rutinasRepo.findRoutinesByUserId(idUsuario));
 		return "misRutinas";
 	}
-	
+
 	// Edit Routines
 	@GetMapping("/editarRutinas")
 	public String editRoutine(HttpServletRequest request, Model model) {
-		
+
 		String idRutina = request.getParameter("idRutina");
 		model.addAttribute("rutina", rutinasRepo.findById(idRutina));
 		return "editarRutina";
 	}
-	
+
 	// Delete Routine
 	@GetMapping("/borrarRutina")
-	public String deleteRoutine(HttpServletRequest request, 
-			RedirectAttributes redirectAttrs) {
-		
+	public String deleteRoutine(HttpServletRequest request, RedirectAttributes redirectAttrs) {
+
 		String idRutina = request.getParameter("idRutina");
 		List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
 		for (Comentarios comentario : comentarios) {
-			
+
 			comentRepo.deleteById(comentario.getIdComentario());
 		}
-		
+
 		rutinasRepo.deleteById(idRutina);
-		redirectAttrs
-		.addFlashAttribute("mensaje", "Rutina borrada correctamente")
-        .addFlashAttribute("clase", "danger");
+		redirectAttrs.addFlashAttribute("mensaje", "Rutina borrada correctamente").addFlashAttribute("clase", "danger");
 		return REDIRECT + "/misRutinas";
 	}
-	
+
 	// Add Routine comment
 	@PostMapping("/aniadirComentarioRutina")
-	public String addRoutineComment(HttpServletRequest request,
-			HttpServletResponse response,
-			CommentForm commentForm, Model model, 
-			RedirectAttributes redirectAttrs) {
-		
+	public String addRoutineComment(HttpServletRequest request, HttpServletResponse response, CommentForm commentForm,
+			Model model, RedirectAttributes redirectAttrs) {
+
 		String idUsuario = commentForm.getIdUsuario();
 		String idRutina = commentForm.getIdRutina();
 		String puntuacion = commentForm.getPuntuacion();
 		String comentario = commentForm.getComentario();
-		
+
 		Optional<Comentarios> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
-		
-		if(comentExistente.isPresent()) {
-			
-			redirectAttrs
-			.addFlashAttribute("mensaje", "Ya has comentado esta rutina")
-	        .addFlashAttribute("clase", "danger");
+
+		if (comentExistente.isPresent()) {
+
+			redirectAttrs.addFlashAttribute("mensaje", "Ya has comentado esta rutina").addFlashAttribute("clase",
+					"danger");
 			Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
 			idRutinaCookie.setPath("/");
 			response.addCookie(idRutinaCookie);
 			return REDIRECT + "/infoRutina";
 		}
-		
+
 		log.info("idUsuario logueado: {}", idUsuario);
 
 		boolean flag = wUpService.checkUser(idUsuario);
 
 		if (flag) {
-			
+
 			wUpService.addCommentRoutine(idUsuario, idRutina, puntuacion, comentario);
-			redirectAttrs
-			.addFlashAttribute("mensaje", "Comentario añadido correctamente")
-	        .addFlashAttribute("clase", "success");
+			redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
+					"success");
 			Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
 			idRutinaCookie.setPath("/");
 			response.addCookie(idRutinaCookie);
@@ -261,28 +282,27 @@ public class RoutinesController {
 			model.addAttribute("userBanned", true);
 			return "login";
 		}
-		
+
 	}
-	
+
 	// Delete Routine comment
 	@GetMapping("/borrarComentario")
-	public String deleteRoutineComment(HttpServletRequest request,
-			HttpServletResponse response, RedirectAttributes redirectAttrs) {
-		
+	public String deleteRoutineComment(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttrs) {
+
 		String idUsuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName()).get().getIdUsuario();
 		String idRutina = request.getParameter("idRutina");
 		Optional<Comentarios> comentario = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
-		if(comentario.isPresent()) {
+		if (comentario.isPresent()) {
 			comentRepo.deleteById(comentario.get().getIdComentario());
 		}
-		
+
 		Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
 		idRutinaCookie.setPath("/");
 		response.addCookie(idRutinaCookie);
-		redirectAttrs
-		.addFlashAttribute("mensaje", "Comentario borrado correctamente")
-        .addFlashAttribute("clase", "danger");
+		redirectAttrs.addFlashAttribute("mensaje", "Comentario borrado correctamente").addFlashAttribute("clase",
+				"danger");
 		return REDIRECT + "/infoRutina";
 	}
-	
+
 }

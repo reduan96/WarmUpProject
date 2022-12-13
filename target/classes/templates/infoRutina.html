@@ -63,6 +63,10 @@
 	<!-- Cuerpo -->
 	<div class="d-flex flex-wrap justify-content-around align-items-center p-1 bg-white">
 		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
+			<h5 style="display:inline;">Puntuación:&nbsp; </h5>
+			<h5 style="display:inline;" th:text="${mediaPuntuacion}"></h5>
+		</div>
+		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
 			<h4 th:text="${rutina.get.nombre}"></h4>
 		</div>
 		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
