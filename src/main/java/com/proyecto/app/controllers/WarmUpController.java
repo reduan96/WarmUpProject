@@ -1,20 +1,28 @@
 package com.proyecto.app.controllers;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.proyecto.app.classes.RegisterForm;
 import com.proyecto.app.services.WarmUpServices;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class WarmUpController {
 
 	@Autowired
 	private WarmUpServices wUpService;
+	
+	private static final String REDIRECT = "redirect:";
 	
 	/*
 	 * ${#request.userPrincipal.principal.email}
@@ -44,7 +52,7 @@ public class WarmUpController {
 	// Register user controller
 	@PostMapping("/registerUser")
 	public String registerUser(@ModelAttribute(name = "registerForm") RegisterForm registerForm, 
-			Model model) {
+			Model model, RedirectAttributes redirectAttrs) {
 
 		String nombre = registerForm.getNombre();
 		String apellidos = registerForm.getApellidos();
@@ -66,11 +74,20 @@ public class WarmUpController {
 			return "registro";
 		} else {
 
-			model.addAttribute("userRegistered", true);
 			wUpService.saveUser(nombre, apellidos, email, clave);
-			model.addAttribute("registerSuccessful", true);
-			return "registro";
+			redirectAttrs
+			.addFlashAttribute("mensaje", "Se ha registrado con éxito, inicie sesión")
+            .addFlashAttribute("clase", "success");
+			return REDIRECT + "/login";
 		}
+	}
+	
+	//Error controller
+	@GetMapping("/error")
+	public String showError(HttpServletResponse response) {
+
+		log.error("Error en la web, info sobre el error: " + response.getStatus());
+		return "error";
 	}
 	
 }
