@@ -52,7 +52,14 @@ public class RoutinesController {
 
 	// Routines controller
 	@GetMapping("/rutinas")
-	public String showRoutine(HttpServletRequest request, Model model) {
+	public String showRoutine(HttpServletRequest request, HttpServletResponse response, Model model,
+			RedirectAttributes redirectAttrs) {
+
+		wUpService.resetCookieIdRutina(request, response);
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 
 		model.addAttribute("rutinas", rutinasRepo.findAll());
 		return "rutinas";
@@ -60,7 +67,12 @@ public class RoutinesController {
 
 	// Up Routines controller
 	@GetMapping("/subirRutina")
-	public String upRoutine() {
+	public String upRoutine(HttpServletRequest request, RedirectAttributes redirectAttrs) {
+
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 
 		return "subirRutina";
 	}
@@ -70,6 +82,11 @@ public class RoutinesController {
 	@PostMapping("/altaRutina")
 	public String registerRoutine(HttpServletRequest request, RoutineForm routineForm, Model model,
 			RedirectAttributes redirectAttrs) {
+
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 
 		String idRutina = request.getParameter("idRutina");
 
@@ -118,11 +135,17 @@ public class RoutinesController {
 			@CookieValue(name = "idRutina", defaultValue = "") String idRutinaCookie, RedirectAttributes redirectAttrs,
 			HttpServletResponse response) {
 
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
+
 		if (idRutinaCookie != null && !"".equals(idRutinaCookie)) {
 
 			log.info("VALOR idRutinaCookie: " + idRutinaCookie);
 			model.addAttribute("rutina", rutinasRepo.findById(idRutinaCookie));
-			String idUsuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName()).get().getIdUsuario();
+			Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+			String idUsuario = usuario.get().getIdUsuario();
 			Optional<Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutinaCookie);
 			if (comentarioPropio.isPresent()) {
 
@@ -141,8 +164,8 @@ public class RoutinesController {
 
 				Double mediaPuntuaciones = (double) (sumTotalPuntuaciones / comentarios.size());
 				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
-			}else {
-				
+			} else {
+
 				model.addAttribute("mediaPuntuacion", "Aun sin puntuación");
 			}
 
@@ -154,10 +177,6 @@ public class RoutinesController {
 				}
 			}
 			model.addAttribute("comentarios", comentariosDist);
-			Cookie cookie = new Cookie("idRutina", null);
-			cookie.setPath("/");
-			cookie.setMaxAge(0);
-			response.addCookie(cookie);
 			redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
 					"success");
 			return "infoRutina";
@@ -166,7 +185,8 @@ public class RoutinesController {
 			String idRutina = request.getParameter("idRutina");
 			log.info("VALOR idRutina: " + idRutina);
 			model.addAttribute("rutina", rutinasRepo.findById(idRutina));
-			String idUsuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName()).get().getIdUsuario();
+			Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+			String idUsuario = usuario.get().getIdUsuario();
 			Optional<Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 			if (comentarioPropio.isPresent()) {
 
@@ -184,8 +204,8 @@ public class RoutinesController {
 
 				Double mediaPuntuaciones = (double) (sumTotalPuntuaciones / comentarios.size());
 				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
-			}else {
-				
+			} else {
+
 				model.addAttribute("mediaPuntuacion", "Se el primero !");
 			}
 
@@ -204,7 +224,13 @@ public class RoutinesController {
 
 	// My routines
 	@GetMapping("/misRutinas")
-	public String myRoutines(Model model, Principal principal) {
+	public String myRoutines(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttrs,
+			Model model, Principal principal) {
+
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 
 		String emailUsuario = principal.getName();
 		Optional<Usuarios> obj = usuarioRepo.findByEmail(emailUsuario);
@@ -219,8 +245,12 @@ public class RoutinesController {
 
 	// Edit Routines
 	@GetMapping("/editarRutinas")
-	public String editRoutine(HttpServletRequest request, Model model) {
+	public String editRoutine(HttpServletRequest request, Model model, RedirectAttributes redirectAttrs) {
 
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 		String idRutina = request.getParameter("idRutina");
 		model.addAttribute("rutina", rutinasRepo.findById(idRutina));
 		return "editarRutina";
@@ -229,6 +259,11 @@ public class RoutinesController {
 	// Delete Routine
 	@GetMapping("/borrarRutina")
 	public String deleteRoutine(HttpServletRequest request, RedirectAttributes redirectAttrs) {
+
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 
 		String idRutina = request.getParameter("idRutina");
 		List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
@@ -247,10 +282,20 @@ public class RoutinesController {
 	public String addRoutineComment(HttpServletRequest request, HttpServletResponse response, CommentForm commentForm,
 			Model model, RedirectAttributes redirectAttrs) {
 
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
+
 		String idUsuario = commentForm.getIdUsuario();
 		String idRutina = commentForm.getIdRutina();
 		String puntuacion = commentForm.getPuntuacion();
 		String comentario = commentForm.getComentario();
+
+		if (idRutina == null) {
+
+			return REDIRECT + "/infoRutina";
+		}
 
 		Optional<Comentarios> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 
@@ -290,7 +335,12 @@ public class RoutinesController {
 	public String deleteRoutineComment(HttpServletRequest request, HttpServletResponse response,
 			RedirectAttributes redirectAttrs) {
 
-		String idUsuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName()).get().getIdUsuario();
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
+		Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+		String idUsuario = usuario.get().getIdUsuario();
 		String idRutina = request.getParameter("idRutina");
 		Optional<Comentarios> comentario = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 		if (comentario.isPresent()) {

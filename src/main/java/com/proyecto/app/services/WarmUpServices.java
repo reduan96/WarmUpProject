@@ -3,9 +3,15 @@ package com.proyecto.app.services;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.proyecto.app.Repositories.ComentarioRepository;
 import com.proyecto.app.Repositories.RutinaRepository;
@@ -21,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 public class WarmUpServices {
 
 	@Autowired
-	private UsuarioRepository usuariosRepo;
+	private UsuarioRepository usuarioRepo;
 
 	@Autowired
-	private RutinaRepository rutinasRepo;
+	private RutinaRepository rutinaRepo;
 	
 	@Autowired
 	private ComentarioRepository comentRepo;
@@ -32,7 +38,7 @@ public class WarmUpServices {
 	// Function to check user if it is present on DB via email and password
 	public boolean checkUser(String email, String clave) {
 
-		Optional<Usuarios> usuario = usuariosRepo.checkUser(email, clave);
+		Optional<Usuarios> usuario = usuarioRepo.checkUser(email, clave);
 
 		if (usuario.isEmpty()) {
 			return false;
@@ -44,7 +50,7 @@ public class WarmUpServices {
 	// Function to check user if it is present on DB via Id User
 	public boolean checkUser(String idUsuario) {
 
-		Optional<Usuarios> usuario = usuariosRepo.findById(idUsuario);
+		Optional<Usuarios> usuario = usuarioRepo.findById(idUsuario);
 
 		if (usuario.isEmpty()) {
 			return false;
@@ -56,7 +62,7 @@ public class WarmUpServices {
 	// Function to check if the email is present on DB
 	public boolean checkEmail(String email) {
 
-		Optional<Usuarios> usuario = usuariosRepo.findByEmail(email);
+		Optional<Usuarios> usuario = usuarioRepo.findByEmail(email);
 
 		if (usuario.isEmpty()) {
 			return false;
@@ -75,12 +81,8 @@ public class WarmUpServices {
 
 		Usuarios usuario = new Usuarios(nombre, apellidos, email, claveCifrada, ts, null);
 
-		usuariosRepo.save(usuario);
+		usuarioRepo.save(usuario);
 	}
-
-	/*
-	 * Routines' functions
-	 */
 
 	// Function to save the routine's user
 	public void registerRoutine(String idUsuario, String nombre, String descripcion, String lunes, String martes,
@@ -90,13 +92,14 @@ public class WarmUpServices {
 		Rutinas rutina = new Rutinas(idUsuario, nombre, descripcion, lunes, martes, miercoles, jueves, viernes, sabado,
 				domingo, ts, null);
 
-		rutinasRepo.save(rutina);
+		rutinaRepo.save(rutina);
 	}
 	
+	// Function to edit routine's data
 	public void editRoutine(String idRutina, String nombre, String descripcion, String lunes, String martes,
 			String miercoles, String jueves, String viernes, String sabado, String domingo) {
 		
-		Optional<Rutinas> rutina = rutinasRepo.findById(idRutina);
+		Optional<Rutinas> rutina = rutinaRepo.findById(idRutina);
 		
 		if(rutina.isEmpty()) {
 			
@@ -114,11 +117,12 @@ public class WarmUpServices {
 			rutina.get().setSabado(sabado);
 			rutina.get().setDomingo(domingo);
 			rutina.get().setFechaSubida(ts);
-			rutinasRepo.save(rutina.get());
+			rutinaRepo.save(rutina.get());
 		}
 		
 	}
 	
+	// Function to add routine's comment
 	public void addCommentRoutine(String idUsuario, String idRutina, 
 			String puntuacion, String comentario) {
 		
@@ -126,5 +130,38 @@ public class WarmUpServices {
 		
 		comentRepo.save(comentarioObj);
 	}
+	
+	// Function to see before everything if the user still exists
+	public boolean checkIfOnlineUserStillExistsOnDb(HttpServletRequest request, RedirectAttributes redirectAttrs) {
+		
+		Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+		if(usuario.isEmpty()) {
+			
+			redirectAttrs.addFlashAttribute("mensaje", "Usuario inexistente en BD, contacte con soporte").addFlashAttribute("clase",
+					"danger");
+			return false;
+		}else {
+			
+			return true;
+		}
+	}
 
+	// Function to reset idRutina Cookie
+	public void resetCookieIdRutina(HttpServletRequest request, HttpServletResponse response) {
+		
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies) {
+			
+			if(cookie.getName().equals("idRutina")) {
+				
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
+			}
+		}
+		//Cookie cookie = new Cookie("idRutina", null);
+		//cookie.setPath("/");
+		//cookie.setMaxAge(0);
+		//response.addCookie(cookie);
+	}
+	
 }

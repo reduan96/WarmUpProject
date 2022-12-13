@@ -1,5 +1,7 @@
 package com.proyecto.app.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +20,13 @@ public class PaymentController {
 
 	@Autowired
 	private RutinaRepository rutinasRepo;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepo;
-	
+
 	@Autowired
 	private ComentarioRepository comentRepo;
-	
+
 	private static final String REDIRECT = "redirect:";
 
 	/*
@@ -33,22 +35,34 @@ public class PaymentController {
 
 	// Pro controller
 	@GetMapping("/altaPro")
-	public String showPro() {
+	public String showPro(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 		return "pro";
 	}
 
 	// Payment controller
 	@GetMapping("/pago")
-	public String showProPayment() {
+	public String showProPayment(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 		return "pasarelaPago";
 	}
 
 	// Payment finished controller
 	@GetMapping("/pagoRealizado")
-	public String paymentFinished(RedirectAttributes redirectAttrs) {
+	public String paymentFinished(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			return REDIRECT + "login";
+		}
 		redirectAttrs.addFlashAttribute("mensaje", "Pago realizado correctamente, ya es entrenador!")
 				.addFlashAttribute("clase", "success");
 		return REDIRECT + "/rutinas";
