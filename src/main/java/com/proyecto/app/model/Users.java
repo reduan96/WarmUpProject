@@ -1,8 +1,5 @@
 package com.proyecto.app.model;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,18 +18,13 @@ public class Users {
 	private String apellidos;
 	private String email;
 	private String clave;
-	private Date fechaAlta;
-	private Date fechaBaja;
 	
-	public Users(String nombre, String apellidos, String email, String clave, Timestamp fechaAlta,
-			Timestamp fechaBaja) {
+	public Users(String nombre, String apellidos, String email, String clave) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.email = email;
 		this.clave = clave;
-		this.fechaAlta = fechaAlta;
-		this.fechaBaja = fechaBaja;
 	}
 	
 }

@@ -14,10 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.proyecto.app.Repositories.CommentsRepository;
+import com.proyecto.app.Repositories.PaymentsRepository;
 import com.proyecto.app.Repositories.RoutinesRepository;
+import com.proyecto.app.Repositories.TrainersRepository;
 import com.proyecto.app.Repositories.UsersRepository;
 import com.proyecto.app.model.Comments;
+import com.proyecto.app.model.Payments;
 import com.proyecto.app.model.Routines;
+import com.proyecto.app.model.Trainers;
 import com.proyecto.app.model.Users;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +38,12 @@ public class WarmUpServices {
 	
 	@Autowired
 	private CommentsRepository comentRepo;
+	
+	@Autowired
+	private TrainersRepository entrenRepo;
+	
+	@Autowired
+	private PaymentsRepository pagoRepo;
 
 	// Function to check user if it is present on DB via email and password
 	public boolean checkUser(String email, String clave) {
@@ -74,12 +84,10 @@ public class WarmUpServices {
 	// Function to save the user´s data and create him
 	public void saveUser(String nombre, String apellidos, String email, String clave) {
 
-		Timestamp ts = Timestamp.from(Instant.now());
-
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String claveCifrada = passwordEncoder.encode(clave);
 
-		Users usuario = new Users(nombre, apellidos, email, claveCifrada, ts, null);
+		Users usuario = new Users(nombre, apellidos, email, claveCifrada);
 
 		usuarioRepo.save(usuario);
 	}
@@ -88,9 +96,8 @@ public class WarmUpServices {
 	public void registerRoutine(String idUsuario, String nombre, String descripcion, String lunes, String martes,
 			String miercoles, String jueves, String viernes, String sabado, String domingo) {
 
-		Timestamp ts = Timestamp.from(Instant.now());
 		Routines rutina = new Routines(idUsuario, nombre, descripcion, lunes, martes, miercoles, jueves, viernes, sabado,
-				domingo, ts, null);
+				domingo);
 
 		rutinaRepo.save(rutina);
 	}
@@ -106,7 +113,6 @@ public class WarmUpServices {
 			log.info("Rutina a editar no encontrada");
 		}else {
 			
-			Timestamp ts = Timestamp.from(Instant.now());
 			rutina.get().setNombre(nombre);
 			rutina.get().setDescripcion(descripcion);
 			rutina.get().setLunes(lunes);
@@ -116,7 +122,6 @@ public class WarmUpServices {
 			rutina.get().setViernes(viernes);
 			rutina.get().setSabado(sabado);
 			rutina.get().setDomingo(domingo);
-			rutina.get().setFechaSubida(ts);
 			rutinaRepo.save(rutina.get());
 		}
 		
@@ -162,6 +167,41 @@ public class WarmUpServices {
 		//cookie.setPath("/");
 		//cookie.setMaxAge(0);
 		//response.addCookie(cookie);
+	}
+	
+	// Function to save Trainer
+	public Trainers saveTrainer(String idUsuario, String nombre, String apellidos, String email, String clave) {
+		
+		Trainers entrenador = new Trainers(idUsuario, nombre, apellidos, 
+				email, clave, null);
+		entrenRepo.save(entrenador);
+		
+		return entrenador;
+	}
+	
+	// Function to save Payment
+	public void savePayment(String idEntrenador, String tarif) {
+		
+		Timestamp ts = Timestamp.from(Instant.now());
+		Payments pago = new Payments(idEntrenador, tarif, ts);
+		pagoRepo.save(pago);
+		
+	}
+	
+	public Boolean checkIfTrainerExist(String emailUsuario) {
+		
+		Optional<Users> usuario = usuarioRepo.findByEmail(emailUsuario);
+		if(usuario.isEmpty()) {
+			return null;
+		}
+		
+		Optional<Trainers> entrenador = entrenRepo.findTrainersByUserId(usuario.get().getIdUsuario());
+		if(entrenador.isEmpty()) {
+			return false;
+		}else {
+			return true;
+		}
+		
 	}
 	
 }

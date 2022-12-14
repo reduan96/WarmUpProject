@@ -20,4 +20,11 @@ public class Payments {
 	private String tarifa;
 	private Date fechaPago;
 	
+	public Payments(String idEntrenador, String tarifa, Date fechaPago) {
+		super();
+		this.idEntrenador = idEntrenador;
+		this.tarifa = tarifa;
+		this.fechaPago = fechaPago;
+	}
+	
 }

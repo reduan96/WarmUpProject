@@ -1,7 +1,6 @@
 package com.proyecto.app.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,12 +26,10 @@ public class Routines {
 	private String viernes;
 	private String sabado;
 	private String domingo;
-	private Date fechaSubida;
-	private Date fechaElim;
 	private ArrayList<Comments> comentarios;
 	
 	public Routines(String idUsuario, String nombre, String descripcion, String lunes, String martes, String miercoles,
-			String jueves, String viernes, String sabado, String domingo, Date fechaSubida, Date fechaElim) {
+			String jueves, String viernes, String sabado, String domingo) {
 		super();
 		this.idUsuario = idUsuario;
 		this.nombre = nombre;
@@ -44,8 +41,6 @@ public class Routines {
 		this.viernes = viernes;
 		this.sabado = sabado;
 		this.domingo = domingo;
-		this.fechaSubida = fechaSubida;
-		this.fechaElim = fechaElim;
 	}
 	
 }

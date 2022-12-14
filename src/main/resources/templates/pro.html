@@ -55,6 +55,13 @@
 		<p class="m-0 p-0 pl-4" style="font-weight:bold; font-size:1.4rem; color:black">WARM-UP</p>
 	</div>
 
+	<!-- Mensaje -->
+	<div class="w-100 d-flex bg-white justify-content-center">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
+		</div>
+	</div>
+
 	<!-- Cuerpo -->
 	<div class="d-flex flex-wrap justify-content-center p-2 bg-white">
 			<h3>CONVIERTETE EN TODO UN PROFESIONAL DEL DEPORTE</h3>
