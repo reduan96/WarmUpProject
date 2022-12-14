@@ -13,12 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.proyecto.app.Repositories.ComentarioRepository;
-import com.proyecto.app.Repositories.RutinaRepository;
-import com.proyecto.app.Repositories.UsuarioRepository;
-import com.proyecto.app.model.Comentarios;
-import com.proyecto.app.model.Rutinas;
-import com.proyecto.app.model.Usuarios;
+import com.proyecto.app.Repositories.CommentsRepository;
+import com.proyecto.app.Repositories.RoutinesRepository;
+import com.proyecto.app.Repositories.UsersRepository;
+import com.proyecto.app.model.Comments;
+import com.proyecto.app.model.Routines;
+import com.proyecto.app.model.Users;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,18 +27,18 @@ import lombok.extern.slf4j.Slf4j;
 public class WarmUpServices {
 
 	@Autowired
-	private UsuarioRepository usuarioRepo;
+	private UsersRepository usuarioRepo;
 
 	@Autowired
-	private RutinaRepository rutinaRepo;
+	private RoutinesRepository rutinaRepo;
 	
 	@Autowired
-	private ComentarioRepository comentRepo;
+	private CommentsRepository comentRepo;
 
 	// Function to check user if it is present on DB via email and password
 	public boolean checkUser(String email, String clave) {
 
-		Optional<Usuarios> usuario = usuarioRepo.checkUser(email, clave);
+		Optional<Users> usuario = usuarioRepo.checkUser(email, clave);
 
 		if (usuario.isEmpty()) {
 			return false;
@@ -50,7 +50,7 @@ public class WarmUpServices {
 	// Function to check user if it is present on DB via Id User
 	public boolean checkUser(String idUsuario) {
 
-		Optional<Usuarios> usuario = usuarioRepo.findById(idUsuario);
+		Optional<Users> usuario = usuarioRepo.findById(idUsuario);
 
 		if (usuario.isEmpty()) {
 			return false;
@@ -62,7 +62,7 @@ public class WarmUpServices {
 	// Function to check if the email is present on DB
 	public boolean checkEmail(String email) {
 
-		Optional<Usuarios> usuario = usuarioRepo.findByEmail(email);
+		Optional<Users> usuario = usuarioRepo.findByEmail(email);
 
 		if (usuario.isEmpty()) {
 			return false;
@@ -79,7 +79,7 @@ public class WarmUpServices {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String claveCifrada = passwordEncoder.encode(clave);
 
-		Usuarios usuario = new Usuarios(nombre, apellidos, email, claveCifrada, ts, null);
+		Users usuario = new Users(nombre, apellidos, email, claveCifrada, ts, null);
 
 		usuarioRepo.save(usuario);
 	}
@@ -89,7 +89,7 @@ public class WarmUpServices {
 			String miercoles, String jueves, String viernes, String sabado, String domingo) {
 
 		Timestamp ts = Timestamp.from(Instant.now());
-		Rutinas rutina = new Rutinas(idUsuario, nombre, descripcion, lunes, martes, miercoles, jueves, viernes, sabado,
+		Routines rutina = new Routines(idUsuario, nombre, descripcion, lunes, martes, miercoles, jueves, viernes, sabado,
 				domingo, ts, null);
 
 		rutinaRepo.save(rutina);
@@ -99,7 +99,7 @@ public class WarmUpServices {
 	public void editRoutine(String idRutina, String nombre, String descripcion, String lunes, String martes,
 			String miercoles, String jueves, String viernes, String sabado, String domingo) {
 		
-		Optional<Rutinas> rutina = rutinaRepo.findById(idRutina);
+		Optional<Routines> rutina = rutinaRepo.findById(idRutina);
 		
 		if(rutina.isEmpty()) {
 			
@@ -126,7 +126,7 @@ public class WarmUpServices {
 	public void addCommentRoutine(String idUsuario, String idRutina, 
 			String puntuacion, String comentario) {
 		
-		Comentarios comentarioObj = new Comentarios(idRutina, null, idUsuario, puntuacion, comentario);
+		Comments comentarioObj = new Comments(idRutina, null, idUsuario, puntuacion, comentario);
 		
 		comentRepo.save(comentarioObj);
 	}
@@ -134,7 +134,7 @@ public class WarmUpServices {
 	// Function to see before everything if the user still exists
 	public boolean checkIfOnlineUserStillExistsOnDb(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 		
-		Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+		Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 		if(usuario.isEmpty()) {
 			
 			redirectAttrs.addFlashAttribute("mensaje", "Usuario inexistente en BD, contacte con soporte").addFlashAttribute("clase",

@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.proyecto.app.model.Usuarios;
+import com.proyecto.app.model.Users;
 
 public class CustomUserDetails implements UserDetails{
 
@@ -13,9 +13,9 @@ public class CustomUserDetails implements UserDetails{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Usuarios user;
+	private Users user;
 	 
-	 public CustomUserDetails(Usuarios user) {
+	 public CustomUserDetails(Users user) {
 	        this.user = user;
 	    }
 	 

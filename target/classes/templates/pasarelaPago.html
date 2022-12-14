@@ -105,8 +105,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="form-group">
-							<label for="name">Nombre</label>
-							<input class="w-100" id="name" type="text" placeholder="Pon tu nombre">
+							<label for="name">Nombre en la tarjeta</label>
+							<input class="w-100" name="cardName" id="name" type="text" placeholder="nombre que figura en la tarjeta" required>
 						</div>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 							<label for="ccnumber">Numero de la tarjeta de credito</label>
 
 							<div class="input-group w-100">
-								<input class="w-75" type="text" placeholder="0000 0000 0000 0000" autocomplete="email">
+								<input class="w-75" name="cardNumber" type="text" placeholder="0000 0000 0000 0000" autocomplete="email" required>
 								<div class="input-group-append">
 									<span class="input-group-text">
 										<i class="mdi mdi-credit-card"></i>
@@ -131,8 +131,8 @@
 				<div class="row">
 					<div class="form-group col-sm-4">
 						<label for="ccmonth">Mes</label>
-						<select class="w-100" id="ccmonth">
-							<option>1</option>
+						<select class="w-100" name="cardMonth" id="ccmonth">
+							<option selected>1</option>
 							<option>2</option>
 							<option>3</option>
 							<option>4</option>
@@ -148,8 +148,8 @@
 					</div>
 					<div class="form-group col-sm-4">
 						<label for="ccyear">Año</label>
-						<select class="w-100" id="ccyear">
-							<option>2022</option>
+						<select class="w-100" name="cardYear" id="ccyear">
+							<option selected>2022</option>
 							<option>2023</option>
 							<option>2024</option>
 							<option>2025</option>
@@ -166,7 +166,7 @@
 					<div class="col-sm-4">
 						<div class="form-group">
 							<label for="cvv">CVV/CVC</label>
-							<input class="w-100" id="cvv" type="text" placeholder="123">
+							<input class="w-100" name="cardCvv" id="cvv" type="text" placeholder="123" required>
 						</div>
 					</div>
 				</div>
