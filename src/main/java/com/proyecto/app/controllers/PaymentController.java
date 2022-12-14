@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.proyecto.app.services.WarmUpServices;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class PaymentController {
 
@@ -39,6 +43,18 @@ public class PaymentController {
 
 			return REDIRECT + "login";
 		}
+		
+		String tarif = request.getParameter("tarif");
+		log.info(tarif);
+		
+		if(!tarif.equals("10") && !tarif.equals("50")) {
+			
+			return REDIRECT + "/error";
+		}
+		
+		// Here we create the payment data and the trainer to show him/her
+		// data at trainers
+		
 		return "pasarelaPago";
 	}
 
