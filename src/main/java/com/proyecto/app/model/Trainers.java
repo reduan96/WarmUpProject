@@ -1,7 +1,6 @@
 package com.proyecto.app.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,12 +24,10 @@ public class Trainers {
 	private String descripcion;
 	private ArrayList<Comments> comentarios;
 	private ArrayList<Payments> pagosRealizados;
-	private Date fechaAlta;
-	private Date fechaBaja;
 	
 	
 	public Trainers(String idUsuario, String nombre, String apellidos, String email,
-			String clave, String descripcion, Date fechaAlta, Date fechaBaja) {
+			String clave, String descripcion) {
 		super();
 		this.idUsuario = idUsuario;
 		this.nombre = nombre;
@@ -38,8 +35,6 @@ public class Trainers {
 		this.email = email;
 		this.clave = clave;
 		this.descripcion = descripcion;
-		this.fechaAlta = fechaAlta;
-		this.fechaBaja = fechaBaja;
 	}
 	
 }
