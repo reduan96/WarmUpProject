@@ -23,7 +23,6 @@
 						<h3 class="mb-4 text-center">Regístrese en WARM-UP</h3>
 						<p th:if="${invalidCredentialsReg}" style="color: red;text-align: center;font-weight: bold;">Este email ya esta registrado</p>
 						<p th:if="${invalidCredentialsRegClave}" style="color: red;text-align: center;font-weight: bold;">Las contraseñas no coinciden</p>
-						<p th:if="${registerSuccessful}" style="color: green;text-align: center;font-weight: bold;">Usted esta registrado correctamente, inicie sesion</p>
 						<form th:action="@{/registerUser}" th:object="${registerForm}" method="post" class="signin-form">
 							<div class="form-group">
 								<input name="nombre" type="text" class="form-control" placeholder="nombre" required>

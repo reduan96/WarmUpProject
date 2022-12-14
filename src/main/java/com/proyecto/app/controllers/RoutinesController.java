@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.proyecto.app.Repositories.ComentarioRepository;
-import com.proyecto.app.Repositories.RutinaRepository;
-import com.proyecto.app.Repositories.UsuarioRepository;
+import com.proyecto.app.Repositories.CommentsRepository;
+import com.proyecto.app.Repositories.RoutinesRepository;
+import com.proyecto.app.Repositories.UsersRepository;
 import com.proyecto.app.classes.CommentForm;
 import com.proyecto.app.classes.RoutineForm;
-import com.proyecto.app.model.Comentarios;
-import com.proyecto.app.model.Usuarios;
+import com.proyecto.app.model.Comments;
+import com.proyecto.app.model.Users;
 import com.proyecto.app.services.WarmUpServices;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,13 +36,13 @@ public class RoutinesController {
 	private WarmUpServices wUpService;
 
 	@Autowired
-	private RutinaRepository rutinasRepo;
+	private RoutinesRepository rutinasRepo;
 
 	@Autowired
-	private UsuarioRepository usuarioRepo;
+	private UsersRepository usuarioRepo;
 
 	@Autowired
-	private ComentarioRepository comentRepo;
+	private CommentsRepository comentRepo;
 
 	private static final String REDIRECT = "redirect:";
 
@@ -144,20 +144,20 @@ public class RoutinesController {
 
 			log.info("VALOR idRutinaCookie: " + idRutinaCookie);
 			model.addAttribute("rutina", rutinasRepo.findById(idRutinaCookie));
-			Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+			Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 			String idUsuario = usuario.get().getIdUsuario();
-			Optional<Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutinaCookie);
+			Optional<Comments> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutinaCookie);
 			if (comentarioPropio.isPresent()) {
 
 				model.addAttribute("comentario", comentarioPropio.get());
 			}
 
-			List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutinaCookie);
+			List<Comments> comentarios = comentRepo.findCommentsByIdRoutine(idRutinaCookie);
 
 			if (!comentarios.isEmpty()) {
 
 				Integer sumTotalPuntuaciones = 0;
-				for (Comentarios puntComent : comentarios) {
+				for (Comments puntComent : comentarios) {
 
 					sumTotalPuntuaciones += Integer.valueOf(puntComent.getPuntuacion());
 				}
@@ -169,8 +169,8 @@ public class RoutinesController {
 				model.addAttribute("mediaPuntuacion", "Aun sin puntuación");
 			}
 
-			List<Comentarios> comentariosDist = new ArrayList<>();
-			for (Comentarios comentarioDist : comentarios) {
+			List<Comments> comentariosDist = new ArrayList<>();
+			for (Comments comentarioDist : comentarios) {
 
 				if (!comentarioDist.getIdUsuario().equals(idUsuario)) {
 					comentariosDist.add(comentarioDist);
@@ -185,19 +185,19 @@ public class RoutinesController {
 			String idRutina = request.getParameter("idRutina");
 			log.info("VALOR idRutina: " + idRutina);
 			model.addAttribute("rutina", rutinasRepo.findById(idRutina));
-			Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+			Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 			String idUsuario = usuario.get().getIdUsuario();
-			Optional<Comentarios> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
+			Optional<Comments> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 			if (comentarioPropio.isPresent()) {
 
 				model.addAttribute("comentario", comentarioPropio.get());
 			}
-			List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
+			List<Comments> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
 
 			if (!comentarios.isEmpty()) {
 
 				Integer sumTotalPuntuaciones = 0;
-				for (Comentarios puntComent : comentarios) {
+				for (Comments puntComent : comentarios) {
 
 					sumTotalPuntuaciones += Integer.valueOf(puntComent.getPuntuacion());
 				}
@@ -209,8 +209,8 @@ public class RoutinesController {
 				model.addAttribute("mediaPuntuacion", "Se el primero !");
 			}
 
-			List<Comentarios> comentariosDist = new ArrayList<>();
-			for (Comentarios comentarioDist : comentarios) {
+			List<Comments> comentariosDist = new ArrayList<>();
+			for (Comments comentarioDist : comentarios) {
 
 				if (!comentarioDist.getIdUsuario().equals(idUsuario)) {
 					comentariosDist.add(comentarioDist);
@@ -233,7 +233,7 @@ public class RoutinesController {
 		}
 
 		String emailUsuario = principal.getName();
-		Optional<Usuarios> obj = usuarioRepo.findByEmail(emailUsuario);
+		Optional<Users> obj = usuarioRepo.findByEmail(emailUsuario);
 		if (obj.isEmpty()) {
 			log.info("El usuario no se haya en la base de datos");
 			return null;
@@ -266,8 +266,8 @@ public class RoutinesController {
 		}
 
 		String idRutina = request.getParameter("idRutina");
-		List<Comentarios> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
-		for (Comentarios comentario : comentarios) {
+		List<Comments> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
+		for (Comments comentario : comentarios) {
 
 			comentRepo.deleteById(comentario.getIdComentario());
 		}
@@ -297,7 +297,7 @@ public class RoutinesController {
 			return REDIRECT + "/infoRutina";
 		}
 
-		Optional<Comentarios> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
+		Optional<Comments> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 
 		if (comentExistente.isPresent()) {
 
@@ -339,10 +339,10 @@ public class RoutinesController {
 
 			return REDIRECT + "login";
 		}
-		Optional<Usuarios> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+		Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 		String idUsuario = usuario.get().getIdUsuario();
 		String idRutina = request.getParameter("idRutina");
-		Optional<Comentarios> comentario = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
+		Optional<Comments> comentario = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 		if (comentario.isPresent()) {
 			comentRepo.deleteById(comentario.get().getIdComentario());
 		}
