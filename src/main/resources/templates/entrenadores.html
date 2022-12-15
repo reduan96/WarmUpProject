@@ -75,7 +75,7 @@
 						<p class="card-text" style="color:black;"> Entrenador especializado en resistencia....</p>
 						<form th:action="@{/infoEntrenador}" method=get>
 							<button class="btn btn-light btn-lg m-2">Mas info</button>
-							<input type="hidden" name="idUsuario" id="idUsuario" />
+							<input type="hidden" name="idEntrenador" th:value="${entrenador.idEntrenador}" />
 						</form>
 					</div>
 				</div>

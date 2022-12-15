@@ -120,7 +120,7 @@
 		
 		<div class="w-75 justify-content-center text-center">
 			<h5 class="mt-5">COMENTARIOS</h5>
-			<div class="shadow p-3 m-3 bg-white rounded">
+			<div th:classappend="${ocultar}" class="shadow p-3 m-3 bg-white rounded">
 			<form th:action="@{/aniadirComentarioRutina}" method="post" class="p-2 mt-2 mb-5">
 				<input type="hidden" name="idUsuario" th:value="${#request.userPrincipal.principal.idUser}" />
 				<input type="hidden" name="idRutina" th:value="${rutina.get.idRutina}" />

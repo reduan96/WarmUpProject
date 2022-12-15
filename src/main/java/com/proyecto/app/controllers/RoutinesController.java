@@ -23,6 +23,7 @@ import com.proyecto.app.Repositories.UsersRepository;
 import com.proyecto.app.classes.CommentForm;
 import com.proyecto.app.classes.RoutineForm;
 import com.proyecto.app.model.Comments;
+import com.proyecto.app.model.Routines;
 import com.proyecto.app.model.Users;
 import com.proyecto.app.services.WarmUpServices;
 
@@ -146,6 +147,16 @@ public class RoutinesController {
 			model.addAttribute("rutina", rutinasRepo.findById(idRutinaCookie));
 			Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 			String idUsuario = usuario.get().getIdUsuario();
+			// If i'm routine's owner i can't add comment
+			Optional<Routines> rutina = rutinasRepo.findById(idRutinaCookie);
+			if (rutina.isPresent()) {
+
+				if (rutina.get().getIdUsuario().equals(idUsuario)) {
+
+					model.addAttribute("ocultar", "d-none");
+				}
+			}
+			// Show own comment
 			Optional<Comments> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutinaCookie);
 			if (comentarioPropio.isPresent()) {
 
@@ -153,7 +164,7 @@ public class RoutinesController {
 			}
 
 			List<Comments> comentarios = comentRepo.findCommentsByIdRoutine(idRutinaCookie);
-
+			// Show rate
 			if (!comentarios.isEmpty()) {
 
 				Integer sumTotalPuntuaciones = 0;
@@ -168,7 +179,7 @@ public class RoutinesController {
 
 				model.addAttribute("mediaPuntuacion", "Aun sin puntuación");
 			}
-
+			// Show rest of comments
 			List<Comments> comentariosDist = new ArrayList<>();
 			for (Comments comentarioDist : comentarios) {
 
@@ -187,13 +198,23 @@ public class RoutinesController {
 			model.addAttribute("rutina", rutinasRepo.findById(idRutina));
 			Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 			String idUsuario = usuario.get().getIdUsuario();
+			// If i'm routine's owner i can't add comment
+			Optional<Routines> rutina = rutinasRepo.findById(idRutina);
+			if (rutina.isPresent()) {
+
+				if (rutina.get().getIdUsuario().equals(idUsuario)) {
+
+					model.addAttribute("ocultar", "d-none");
+				}
+			}
+			// Show own comment
 			Optional<Comments> comentarioPropio = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 			if (comentarioPropio.isPresent()) {
 
 				model.addAttribute("comentario", comentarioPropio.get());
 			}
 			List<Comments> comentarios = comentRepo.findCommentsByIdRoutine(idRutina);
-
+			// show rate
 			if (!comentarios.isEmpty()) {
 
 				Integer sumTotalPuntuaciones = 0;
@@ -209,6 +230,7 @@ public class RoutinesController {
 				model.addAttribute("mediaPuntuacion", "Se el primero !");
 			}
 
+			// show rest of comments
 			List<Comments> comentariosDist = new ArrayList<>();
 			for (Comments comentarioDist : comentarios) {
 
