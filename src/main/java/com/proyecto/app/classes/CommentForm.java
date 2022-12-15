@@ -11,6 +11,7 @@ public class CommentForm {
 
 	private String idUsuario;
 	private String idRutina;
+	private String idEntrenador;
 	private String idComentario;
 	private String puntuacion;
 	private String comentario;
