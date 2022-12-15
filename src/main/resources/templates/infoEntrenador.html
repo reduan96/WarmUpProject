@@ -67,55 +67,13 @@
 			<h5 style="display:inline;" th:text="${mediaPuntuacion}"></h5>
 		</div>
 		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
-			<h4 th:text="${rutina.get.nombre}"></h4>
+			<h4 th:text="${entrenador.get.nombre}"></h4>
 		</div>
 		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
-			<h5 th:text="${rutina.get.descripcion}"></h5>
+			<h5 th:text="${entrenador.get.descripcion}"></h5>
 		</div>
-		
-		<div class="w-75 justify-content-center text-center" style="color:black;">
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">LUNES</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.lunes}"></p>
-			  </div>
-			</div>
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">MARTES</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.martes}"></p>
-			  </div>
-			</div>
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">MIERCOLES</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.miercoles}"></p>
-			  </div>
-			</div>
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">JUEVES</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.jueves}"></p>
-			  </div>
-			</div>
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">VIERNES</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.viernes}"></p>
-			  </div>
-			</div>
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">SABADO</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.sabado}"></p>
-			  </div>
-			</div>
-			<div class="card bg-white mb-1">
-			  <div class="card-header font-weight-bold">DOMINGO</div>
-			  <div class="card-body">
-			    <p class="card-text" th:text="${rutina.get.domingo}"></p>
-			  </div>
-			</div>
+		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
+			<h5 th:text="${entrenador.get.email}"></h5>
 		</div>
 		
 		<div class="w-75 justify-content-center text-center">
@@ -123,7 +81,7 @@
 			<div th:classappend="${ocultar}" class="shadow p-3 m-3 bg-white rounded">
 			<form th:action="@{/aniadirComentario}" method="post" class="p-2 mt-2 mb-5">
 				<input type="hidden" name="idUsuario" th:value="${#request.userPrincipal.principal.idUser}" />
-				<input type="hidden" name="idRutina" th:value="${rutina.get.idRutina}" />
+				<input type="hidden" name="idEntrenador" th:value="${entrenador.get.idEntrenador}" />
 				<label for="punt" class="font-weight-bold text-dark">PUNTUA LA RUTINA (1 al 10)</label>
 				<select name="puntuacion" id="punt">
 					<option value="1">1</option>
@@ -170,7 +128,7 @@
 		</div>
 		
 		<div class="w-100 d-flex justify-content-center bg-white">
-			<form th:action="@{/rutinas}" method="get"><button class="btn btn-light btn-lg m-2">Volver</button></form>
+			<form th:action="@{/entrenadores}" method="get"><button class="btn btn-light btn-lg m-2">Volver</button></form>
 		</div>
 		
 	</div>
@@ -192,7 +150,7 @@
 				      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
 				      <form th:action="@{/borrarComentario}" method=get>
 				      	<button class="btn btn-danger">Si</button>
-						<input type="hidden" name="idRutina" th:value="${rutina.get.idRutina}" />
+						<input type="hidden" name="idEntrenador" th:value="${entrenador.get.idEntrenador}" />
 				      </form>
 				    </div>
 				  </div>

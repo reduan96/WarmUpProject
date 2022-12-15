@@ -129,11 +129,18 @@ public class WarmUpServices {
 	
 	// Function to add routine's comment
 	public void addCommentRoutine(String idUsuario, String idRutina, 
-			String puntuacion, String comentario) {
+			String idEntrenador, String puntuacion, String comentario) {
 		
-		Comments comentarioObj = new Comments(idRutina, null, idUsuario, puntuacion, comentario);
+		if(idEntrenador == null) {
+			
+			Comments comentarioObj = new Comments(idRutina, null, idUsuario, puntuacion, comentario);
+			comentRepo.save(comentarioObj);
+		}else {
+			
+			Comments comentarioObj = new Comments(null, idEntrenador, idUsuario, puntuacion, comentario);
+			comentRepo.save(comentarioObj);
+		}
 		
-		comentRepo.save(comentarioObj);
 	}
 	
 	// Function to see before everything if the user still exists

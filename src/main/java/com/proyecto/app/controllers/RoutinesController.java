@@ -147,7 +147,7 @@ public class RoutinesController {
 			model.addAttribute("rutina", rutinasRepo.findById(idRutinaCookie));
 			Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 			String idUsuario = usuario.get().getIdUsuario();
-			// If i'm routine's owner i can't add comment
+			// If i'm routine's owner i can't comment
 			Optional<Routines> rutina = rutinasRepo.findById(idRutinaCookie);
 			if (rutina.isPresent()) {
 
@@ -198,7 +198,7 @@ public class RoutinesController {
 			model.addAttribute("rutina", rutinasRepo.findById(idRutina));
 			Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 			String idUsuario = usuario.get().getIdUsuario();
-			// If i'm routine's owner i can't add comment
+			// If i'm routine's owner i can't comment
 			Optional<Routines> rutina = rutinasRepo.findById(idRutina);
 			if (rutina.isPresent()) {
 
@@ -299,8 +299,8 @@ public class RoutinesController {
 		return REDIRECT + "/misRutinas";
 	}
 
-	// Add Routine comment
-	@PostMapping("/aniadirComentarioRutina")
+	// Add routine comment or trainer comment
+	@PostMapping("/aniadirComentario")
 	public String addRoutineComment(HttpServletRequest request, HttpServletResponse response, CommentForm commentForm,
 			Model model, RedirectAttributes redirectAttrs) {
 
@@ -311,43 +311,83 @@ public class RoutinesController {
 
 		String idUsuario = commentForm.getIdUsuario();
 		String idRutina = commentForm.getIdRutina();
+		String idEntrenador = commentForm.getIdEntrenador();
 		String puntuacion = commentForm.getPuntuacion();
 		String comentario = commentForm.getComentario();
 
-		if (idRutina == null) {
+		if (idRutina == null && idEntrenador == null) {
 
-			return REDIRECT + "/infoRutina";
+			redirectAttrs
+			.addFlashAttribute("mensaje", "Error al al guardar el comentario, intentelo mas tarde")
+			.addFlashAttribute("clase", "danger");
+			return REDIRECT + "/rutinas";
 		}
 
-		Optional<Comments> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
+		if(idEntrenador.isEmpty()) {
+			
+			Optional<Comments> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 
-		if (comentExistente.isPresent()) {
+			if (comentExistente.isPresent()) {
 
-			redirectAttrs.addFlashAttribute("mensaje", "Ya has comentado esta rutina").addFlashAttribute("clase",
-					"danger");
-			Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
-			idRutinaCookie.setPath("/");
-			response.addCookie(idRutinaCookie);
-			return REDIRECT + "/infoRutina";
-		}
+				redirectAttrs.addFlashAttribute("mensaje", "Ya has comentado esta rutina").addFlashAttribute("clase",
+						"danger");
+				Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
+				idRutinaCookie.setPath("/");
+				response.addCookie(idRutinaCookie);
+				return REDIRECT + "/infoRutina";
+			}
 
-		log.info("idUsuario logueado: {}", idUsuario);
+			log.info("idUsuario logueado: {}", idUsuario);
 
-		boolean flag = wUpService.checkUser(idUsuario);
+			boolean flag = wUpService.checkUser(idUsuario);
 
-		if (flag) {
+			if (flag) {
 
-			wUpService.addCommentRoutine(idUsuario, idRutina, puntuacion, comentario);
-			redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
-					"success");
-			Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
-			idRutinaCookie.setPath("/");
-			response.addCookie(idRutinaCookie);
-			return REDIRECT + "/infoRutina";
-		} else {
+				wUpService.addCommentRoutine(idUsuario, idRutina, null, puntuacion, comentario);
+				redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
+						"success");
+				Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
+				idRutinaCookie.setPath("/");
+				response.addCookie(idRutinaCookie);
+				return REDIRECT + "/infoRutina";
+			} else {
 
-			model.addAttribute("userBanned", true);
-			return "login";
+				model.addAttribute("userBanned", true);
+				return "login";
+			}
+			
+		}else {
+			
+			Optional<Comments> comentExistente = comentRepo.checkIfCommentExistOnTrainer(idUsuario, idEntrenador);
+
+			if (comentExistente.isPresent()) {
+
+				redirectAttrs.addFlashAttribute("mensaje", "Ya has comentado este entrenador").addFlashAttribute("clase",
+						"danger");
+				Cookie idEntrenadorCookie = new Cookie("idEntrenador", idEntrenador);
+				idEntrenadorCookie.setPath("/");
+				response.addCookie(idEntrenadorCookie);
+				return REDIRECT + "/infoEntrenador";
+			}
+
+			log.info("idUsuario logueado: {}", idUsuario);
+
+			boolean flag = wUpService.checkUser(idUsuario);
+
+			if (flag) {
+
+				wUpService.addCommentRoutine(idUsuario, null, idEntrenador, puntuacion, comentario);
+				redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
+						"success");
+				Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
+				idRutinaCookie.setPath("/");
+				response.addCookie(idRutinaCookie);
+				return REDIRECT + "/infoRutina";
+			} else {
+
+				model.addAttribute("userBanned", true);
+				return "login";
+			}
 		}
 
 	}
@@ -361,20 +401,40 @@ public class RoutinesController {
 
 			return REDIRECT + "login";
 		}
+		
+		
 		Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
 		String idUsuario = usuario.get().getIdUsuario();
 		String idRutina = request.getParameter("idRutina");
-		Optional<Comments> comentario = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
-		if (comentario.isPresent()) {
-			comentRepo.deleteById(comentario.get().getIdComentario());
-		}
+		String idEntrenador = request.getParameter("idEntrenador");
+		
+		if(idEntrenador == null) {
+			
+			Optional<Comments> comentario = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
+			if (comentario.isPresent()) {
+				comentRepo.deleteById(comentario.get().getIdComentario());
+			}
 
-		Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
-		idRutinaCookie.setPath("/");
-		response.addCookie(idRutinaCookie);
-		redirectAttrs.addFlashAttribute("mensaje", "Comentario borrado correctamente").addFlashAttribute("clase",
-				"danger");
-		return REDIRECT + "/infoRutina";
+			Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
+			idRutinaCookie.setPath("/");
+			response.addCookie(idRutinaCookie);
+			redirectAttrs.addFlashAttribute("mensaje", "Comentario borrado correctamente").addFlashAttribute("clase",
+					"danger");
+			return REDIRECT + "/infoRutina";
+		}else {
+			
+			Optional<Comments> comentario = comentRepo.checkIfCommentExistOnTrainer(idUsuario, idEntrenador);
+			if (comentario.isPresent()) {
+				comentRepo.deleteById(comentario.get().getIdComentario());
+			}
+			
+			Cookie idEntrenadorCookie = new Cookie("idEntrenador", idEntrenador);
+			idEntrenadorCookie.setPath("/");
+			response.addCookie(idEntrenadorCookie);
+			redirectAttrs.addFlashAttribute("mensaje", "Comentario borrado correctamente").addFlashAttribute("clase",
+					"danger");
+			return REDIRECT + "/infoEntrenador";
+		}
 	}
 
 }
