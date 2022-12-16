@@ -159,16 +159,27 @@ public class WarmUpServices {
 	}
 
 	// Function to reset idRutina Cookie
-	public void resetCookieIdRutina(HttpServletRequest request, HttpServletResponse response) {
+	public void resetCookie(HttpServletRequest request, HttpServletResponse response, String tipo) {
 		
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
 			
-			if(cookie.getName().equals("idRutina")) {
+			if(tipo.equals("idRutina")) {
 				
-				cookie.setMaxAge(0);
-				response.addCookie(cookie);
+				if(cookie.getName().equals("idRutina")) {
+					
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+				}
+			}else {
+				
+				if(cookie.getName().equals("idEntrenador")) {
+					
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+				}
 			}
+			
 		}
 		//Cookie cookie = new Cookie("idRutina", null);
 		//cookie.setPath("/");
