@@ -45,8 +45,10 @@ public class TrainersController {
 
 	// Trainers controller
 	@GetMapping("/entrenadores")
-	public String showTrainers(Model model, HttpServletRequest request, RedirectAttributes redirectAttrs) {
+	public String showTrainers(Model model, HttpServletRequest request, 
+			RedirectAttributes redirectAttrs, HttpServletResponse response) {
 
+		wUpService.resetCookie(request, response, "idEntrenador");
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
 			return REDIRECT + "login";

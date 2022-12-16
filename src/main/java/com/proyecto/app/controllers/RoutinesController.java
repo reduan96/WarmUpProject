@@ -56,7 +56,7 @@ public class RoutinesController {
 	public String showRoutine(HttpServletRequest request, HttpServletResponse response, Model model,
 			RedirectAttributes redirectAttrs) {
 
-		wUpService.resetCookieIdRutina(request, response);
+		wUpService.resetCookie(request, response, "idRutina");
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
 			return REDIRECT + "login";
@@ -323,7 +323,7 @@ public class RoutinesController {
 			return REDIRECT + "/rutinas";
 		}
 
-		if(idEntrenador.isEmpty()) {
+		if(idEntrenador == null) {
 			
 			Optional<Comments> comentExistente = comentRepo.checkIfCommentExistOnRoutine(idUsuario, idRutina);
 
@@ -382,7 +382,7 @@ public class RoutinesController {
 				Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
 				idRutinaCookie.setPath("/");
 				response.addCookie(idRutinaCookie);
-				return REDIRECT + "/infoRutina";
+				return REDIRECT + "/infoEntrenador";
 			} else {
 
 				model.addAttribute("userBanned", true);
