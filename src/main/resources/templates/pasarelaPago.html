@@ -93,6 +93,13 @@
 	<div class="w-100 justify-content-left bg-white">
 		<p class="m-0 p-0 pl-4" style="font-weight:bold; font-size:1.4rem; color:black">WARM-UP</p>
 	</div>
+	
+	<!-- Mensaje -->
+	<div class="w-100 d-flex bg-white justify-content-center">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
+		</div>
+	</div>
 
 	<!-- Cuerpo -->
 	<div class="bg-white pr-4 pl-4 w-100 pt-3">
@@ -119,8 +126,8 @@
 								<label for="ccnumber">Numero de la tarjeta de credito</label>
 
 								<div class="input-group w-100">
-									<input required class="w-75" name="cardNumber" type="text"
-										placeholder="0000 0000 0000 0000" autocomplete="email" />
+									<input required class="w-75" name="cardNumber" type="number"
+										placeholder="0000 0000 0000 0000" minlength="16" maxlength="16" />
 									<div class="input-group-append">
 										<span class="input-group-text">
 											<i class="mdi mdi-credit-card"></i>
@@ -169,7 +176,8 @@
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label for="cvv">CVV/CVC</label>
-								<input required class="w-100" name="cardCvv" id="cvv" type="text" placeholder="123" />
+								<input required class="w-100" name="cardCvv" id="cvv" type="number" placeholder="123"
+								minlength="3" maxlength="3" />
 							</div>
 						</div>
 					</div>

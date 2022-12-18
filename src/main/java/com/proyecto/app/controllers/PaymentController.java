@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,8 @@ public class PaymentController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 		
 		String emailUsuario = principal.getName();
@@ -60,14 +62,21 @@ public class PaymentController {
 	// Payment controller
 	@GetMapping("/pago")
 	public String showProPayment(HttpServletResponse response,
-			HttpServletRequest request, RedirectAttributes redirectAttrs) {
+			HttpServletRequest request, RedirectAttributes redirectAttrs,
+			@CookieValue(name = "tarif", defaultValue = "") String tarifCookieRecogida) {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 		
 		String tarif = request.getParameter("tarif");
+		
+		if(tarif == null) {
+			
+			tarif = tarifCookieRecogida;
+		}
 		
 		if(!tarif.equals("10") && !tarif.equals("50")) {
 			
@@ -88,7 +97,8 @@ public class PaymentController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 		
 		// Here we create the payment data and the trainer
@@ -98,6 +108,14 @@ public class PaymentController {
 		
 		if(usuario.isEmpty()) {
 			return REDIRECT + "/error";
+		}
+		
+		if(request.getParameter("cardNumber").length() != 16 || request.getParameter("cardCvv").length() != 3) {
+			
+			redirectAttrs
+			.addFlashAttribute("mensaje", "El numero de tarjeta son 16 digitos y el cvv 3 digitos")
+			.addFlashAttribute("clase", "danger");
+			return REDIRECT + "/pago";
 		}
 		
 		Users datosUsuario = usuario.get();

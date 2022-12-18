@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -59,7 +60,8 @@ public class RoutinesController {
 		wUpService.resetCookie(request, response, "idRutina");
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		model.addAttribute("rutinas", rutinasRepo.findAll());
@@ -72,7 +74,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		return "subirRutina";
@@ -86,7 +89,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		String idRutina = request.getParameter("idRutina");
@@ -125,7 +129,8 @@ public class RoutinesController {
 		} else {
 
 			model.addAttribute("userBanned", true);
-			return "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return "/login?logout";
 		}
 	}
 
@@ -138,7 +143,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		if (idRutinaCookie != null && !"".equals(idRutinaCookie)) {
@@ -227,7 +233,7 @@ public class RoutinesController {
 				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
 			} else {
 
-				model.addAttribute("mediaPuntuacion", "Se el primero !");
+				model.addAttribute("mediaPuntuacion", "Comenta!");
 			}
 
 			// show rest of comments
@@ -251,7 +257,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		String emailUsuario = principal.getName();
@@ -271,7 +278,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 		String idRutina = request.getParameter("idRutina");
 		model.addAttribute("rutina", rutinasRepo.findById(idRutina));
@@ -284,7 +292,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		String idRutina = request.getParameter("idRutina");
@@ -306,7 +315,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		String idUsuario = commentForm.getIdUsuario();
@@ -353,7 +363,8 @@ public class RoutinesController {
 			} else {
 
 				model.addAttribute("userBanned", true);
-				return "login";
+				SecurityContextHolder.getContext().setAuthentication(null);
+				return "/login?logout";
 			}
 			
 		}else {
@@ -379,14 +390,15 @@ public class RoutinesController {
 				wUpService.addCommentRoutine(idUsuario, null, idEntrenador, puntuacion, comentario);
 				redirectAttrs.addFlashAttribute("mensaje", "Comentario añadido correctamente").addFlashAttribute("clase",
 						"success");
-				Cookie idRutinaCookie = new Cookie("idRutina", idRutina);
-				idRutinaCookie.setPath("/");
-				response.addCookie(idRutinaCookie);
+				Cookie idEntrenadorCookie = new Cookie("idEntrenador", idEntrenador);
+				idEntrenadorCookie.setPath("/");
+				response.addCookie(idEntrenadorCookie);
 				return REDIRECT + "/infoEntrenador";
 			} else {
 
 				model.addAttribute("userBanned", true);
-				return "login";
+				SecurityContextHolder.getContext().setAuthentication(null);
+				return "/login?logout";
 			}
 		}
 
@@ -399,7 +411,8 @@ public class RoutinesController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 		
 		

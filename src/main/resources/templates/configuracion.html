@@ -68,14 +68,69 @@
 					<div class="d-flex flex-column align-items-center text-center p-3 py-5"><img
 							class="rounded-circle mt-5" width="150px"
 							src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-							<span class="font-weight-bold pb-2" th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></span>
-							<span class="font-weight-bold text-dark pb-2" th:text="${usuario.email}"></span>
-							<span class="font-weight-bold text-dark text-justify" th:text="${entrenador.descripcion}"></span>
+						<span class="font-weight-bold pb-2"
+							th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></span>
+						<span class="font-weight-bold text-dark pb-2" th:text="${usuario.email}"></span>
+						<span class="font-weight-bold text-dark text-justify"
+							th:text="${entrenador.descripcion}"></span>
 					</div>
-					<div class="mt-5 mb-5 text-center justify-content-center">
-					<button class="btn btn-light" type="submit">Darse de baja como usuario</button></div>
+					<div class="mb-3 text-center justify-content-center">
+						<button class="btn btn-light btn-lg m-2" data-toggle="modal"
+							data-target="#exampleModalCenter">Darse de baja como usuario</button>
+					</div>
 					<div th:class="'text-center justify-content-center '+(${oculto}!=null?${oculto}:'')">
-					<button class="btn btn-light" type="submit">Darse de baja como entrenador</button></div>
+						<button class="btn btn-light btn-lg m-2" data-toggle="modal"
+							data-target="#exampleModalCenter2">Darse de baja como entrenador</button>
+					</div>
+					<!-- Modal usuario -->
+					<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+						aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									Seguro que quieres darte de baja como usuario ?
+									Tambien se te dara de baja como entrenador en
+									caso de que estes dado de alta.
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+									<form th:action="@{/bajaUsuario}" method=get>
+										<button class="btn btn-danger">Si</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal usuario -->
+					<!-- Modal entrenador -->
+					<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+						aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									Seguro que quieres darte de baja como entrenador ?
+									Seguiras siendo usuario.
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+									<form th:action="@{/bajaEntrenador}" method=get>
+										<button class="btn btn-danger">Si</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal entrenador -->
 				</div>
 				<div class="col-md-6">
 					<div class="p-3 py-5">
@@ -85,21 +140,32 @@
 						<div class="row mt-3">
 							<form th:action="@{/guardarDatosPerfil}" th:object="${EditProfileForm}" method="post">
 								<div class="col-md-12 mt-2"><label for="nombre">Nombre</label>
-								<input class="w-100" name="nombre" id="nombre" type="text" th:value="${usuario.nombre}" required></div>
+									<input class="w-100" name="nombre" id="nombre" type="text"
+										th:value="${usuario.nombre}" required>
+								</div>
 								<div class="col-md-12 mt-2"><label for="apellidos">Apellidos</label>
-								<input class="w-100" name="apellidos" id="apellidos" type="text" th:value="${usuario.apellidos}" required></div>
-								<div class="col-md-12 mt-2"><label for="claveNueva">Si quiere cambiar la clave, introduzca una nueva</label>
-								<input class="w-100" name="claveNueva" id="claveNueva" type="text"></div>
-								<div th:class="'col-md-12 mt-2 ' + (${oculto} != null ? ${oculto} : ${oculto})"><label for="descripcion">Que ofreces como entrenador ?</label>
-								<textarea class="w-100" name="descripcion" id="descripcion" rows="4" cols="50" style="border-radius: 5px;" th:text="${entrenador.descripcion}" th:required="${requerido}"></textarea></div>
+									<input class="w-100" name="apellidos" id="apellidos" type="text"
+										th:value="${usuario.apellidos}" required>
+								</div>
+								<div class="col-md-12 mt-2"><label for="claveNueva">Si quiere cambiar la clave,
+										introduzca una nueva</label>
+									<input class="w-100" name="claveNueva" id="claveNueva" type="text">
+								</div>
+								<div th:class="'col-md-12 mt-2 ' + (${oculto} != null ? ${oculto} : ${oculto})"><label
+										for="descripcion">Que ofreces como entrenador ?</label>
+									<textarea class="w-100" name="descripcion" id="descripcion" rows="4" cols="50"
+										style="border-radius: 5px;" th:text="${entrenador.descripcion}"
+										th:required="${requerido}"></textarea>
+								</div>
 								<div class="mt-5 text-center justify-content-center w-100">
-								<button class="btn btn-light" type="submit">Guardar datos</button></div>
+									<button class="btn btn-light" type="submit">Guardar datos</button>
+								</div>
 							</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	</div>
 

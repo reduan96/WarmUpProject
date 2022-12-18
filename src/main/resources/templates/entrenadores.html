@@ -72,7 +72,7 @@
 					<div class="card-body">
 					<img class="rounded-circle mt-5" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
 						<h5 class="card-title" th:text="${entrenador.nombre}"></h5>
-						<p class="card-text" style="color:black;"> Entrenador especializado en resistencia....</p>
+						<p class="card-text" style="color:black;" th:text="${entrenador.descripcion}"></p>
 						<form th:action="@{/infoEntrenador}" method=get>
 							<button class="btn btn-light btn-lg m-2">Mas info</button>
 							<input type="hidden" name="idEntrenador" th:value="${entrenador.idEntrenador}" />

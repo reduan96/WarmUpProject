@@ -28,14 +28,15 @@
 				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/entrenadores}"
 						style="font-size: 1.3rem;">Entrenadores</a>
 				</li>
-				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}" style="font-size: 1.3rem;">Pro</a>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}"
+						style="font-size: 1.3rem;">Pro</a>
 				</li>
 				<li class="nav-item dropdown mb-2"><a class="nav-link dropdown-toggle text-dark"
 						href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true"
 						aria-expanded="false" style="font-size: 1.3rem;">Mi perfil</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown03">
-						<a class="dropdown-item text-dark" th:href="@{/misRutinas}"
-							style="font-size: 1.3rem;">Mis Rutinas</a>
+						<a class="dropdown-item text-dark" th:href="@{/misRutinas}" style="font-size: 1.3rem;">Mis
+							Rutinas</a>
 						<a class="dropdown-item text-dark" th:href="@{/config}"
 							style="font-size: 1.3rem;">Configuración</a>
 						<form th:action="@{/logout}" method=post>
@@ -50,113 +51,129 @@
 	<div class="w-100 justify-content-left bg-white">
 		<p class="m-0 p-0 pl-4" style="font-weight: bold; font-size: 1.4rem; color: black">WARM-UP</p>
 	</div>
-	
+
 	<!-- Mensaje -->
-		<div class="w-100 d-flex bg-white justify-content-center">
-			<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
-				th:if="${mensaje != null}"
-		     	th:text="${mensaje}"
-		     	class="alert">
-			</div>
+	<div class="w-100 d-flex bg-white justify-content-center">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
 		</div>
-	
+	</div>
+
 	<!-- Cuerpo -->
 	<div class="d-flex flex-wrap justify-content-around align-items-center p-1 bg-white">
-		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
-			<h5 style="display:inline;">Puntuación:&nbsp; </h5>
-			<h5 style="display:inline;" th:text="${mediaPuntuacion}"></h5>
-		</div>
-		<div class="w-100 d-flex justify-content-center align-items-center pt-2">
-			<h4 th:text="${entrenador.get.nombre}"></h4>
-		</div>
-		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
-			<h5 th:text="${entrenador.get.descripcion}"></h5>
-		</div>
-		<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
-			<h5 th:text="${entrenador.get.email}"></h5>
-		</div>
-		
-		<div class="w-75 justify-content-center text-center">
-			<h5 class="mt-5">COMENTARIOS</h5>
-			<div th:classappend="${ocultar}" class="shadow p-3 m-3 bg-white rounded">
-			<form th:action="@{/aniadirComentario}" method="post" class="p-2 mt-2 mb-5">
-				<input type="hidden" name="idUsuario" th:value="${#request.userPrincipal.principal.idUser}" />
-				<input type="hidden" name="idEntrenador" th:value="${entrenador.get.idEntrenador}" />
-				<label for="punt" class="font-weight-bold text-dark">PUNTUA LA RUTINA (1 al 10)</label>
-				<select name="puntuacion" id="punt">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5" selected>5</option>
-					<option value="6">6</option>
-					<option value="7">7</option>
-					<option value="8">8</option>
-					<option value="9">9</option>
-					<option value="10">10</option>
-				</select>
-				<h5>Añade tu comentario</h5>
-				<textarea class="w-100 bg-white" name="comentario" rows="4" cols="50" required style="border-radius: 5px;"></textarea>
-				<button class="btn btn-light btn-lg m-2">Añadir</button>
-			</form>
+		<div class="w-75 shadow p-3 m-3 bg-white rounded" style="font-size:1.2rem">
+			<div class="w-100 d-flex justify-content-center align-items-center pt-2 text-dark">
+				<p style="display:inline;">Puntuación:&nbsp; </p>
+				<p style="display:inline;" th:text="${mediaPuntuacion}"></p>
+			</div>
+			<div class="w-100 d-flex justify-content-center align-items-center">
+				<img class="rounded-circle mt-5" width="175px"
+					src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+			</div>
+			<div class="w-100 d-flex justify-content-center align-items-center pt-2 text-dark">
+				<p th:text="${entrenador.get.nombre} + ' ' + ${entrenador.get.apellidos}"></p>
+			</div>
+			<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
+				<p>Servicios ofrecidos:</p>
+			</div>
+			<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
+				<p class="w-75 text-justify" th:text="${entrenador.get.descripcion}"></p>
+			</div>
+			<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
+				<p>Contacto:</p>
+			</div>
+			<div class="w-100 d-flex justify-content-center align-items-center pt-1 pb-1" style="color:black">
+				<p th:text="${entrenador.get.email}"></p>
 			</div>
 		</div>
-		
+
+		<div class="w-75 justify-content-center text-center">
+			<h6 class="mt-5 text-dark">COMENTARIOS</h6>
+			<div th:classappend="${ocultar}" class="shadow p-3 m-3 bg-white rounded">
+				<form th:action="@{/aniadirComentario}" method="post" class="p-2 mt-2 mb-5">
+					<input type="hidden" name="idUsuario" th:value="${#request.userPrincipal.principal.idUser}" />
+					<input type="hidden" name="idEntrenador" th:value="${entrenador.get.idEntrenador}" />
+					<label for="punt" class="font-weight-bold text-dark">PUNTUA LA RUTINA (1 al 10)</label>
+					<select name="puntuacion" id="punt">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5" selected>5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+					<h5>Añade tu comentario</h5>
+					<textarea class="w-100 bg-white" name="comentario" rows="4" cols="50" required
+						style="border-radius: 5px;"></textarea>
+					<button class="btn btn-light btn-lg m-2">Añadir</button>
+				</form>
+			</div>
+		</div>
+
 		<!-- Listar comentario propio -->
 		<div class="w-75 shadow p-3 m-3 bg-white rounded text-dark" th:each="coment : ${comentario}">
 			<div class="m-2 p-0" style="text-align: center;">
 				<div class="card-body">
 					<p style="display:inline">TU PUNTUACION: </p>
-					<p th:text="${coment.puntuacion}" style="display:inline"></p><p style="display:inline">/10</p>
+					<p th:text="${coment.puntuacion}" style="display:inline"></p>
+					<p style="display:inline">/10</p>
 					<p style="color:black;">TU COMENTARIO:</p>
 					<p class="card-text" style="color:black;" th:text="${coment.comentario}"></p>
-					<button class="btn btn-light btn-lg m-2" data-toggle="modal" data-target="#exampleModalCenter">Borrar comentario</button>
+					<button class="btn btn-light btn-lg m-2" data-toggle="modal"
+						data-target="#exampleModalCenter">Borrar comentario</button>
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Listar comentarios -->
 		<div class="w-75 shadow p-3 m-3 bg-white rounded text-dark" th:each="comentario : ${comentarios}">
 			<div class="m-2 p-0" style="text-align: center;">
 				<div class="card-body">
-				<p style="display:inline">PUNTUACION DADA: </p>
-					<p  style="display:inline" class="card-title" th:text="${comentario.puntuacion}"></p><p style="display:inline">/10</p>
+					<p style="display:inline">PUNTUACION DADA: </p>
+					<p style="display:inline" class="card-title" th:text="${comentario.puntuacion}"></p>
+					<p style="display:inline">/10</p>
 					<p style="color:black;">COMENTARIO:</p>
 					<p class="card-text" style="color:black;" th:text="${comentario.comentario}"></p>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="w-100 d-flex justify-content-center bg-white">
-			<form th:action="@{/entrenadores}" method="get"><button class="btn btn-light btn-lg m-2">Volver</button></form>
+			<form th:action="@{/entrenadores}" method="get"><button class="btn btn-light btn-lg m-2">Volver</button>
+			</form>
 		</div>
-		
+
 	</div>
 	<!-- Cuerpo -->
-	
+
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				    	<span aria-hidden="true">&times;</span>
-				    </button>
-				    </div>
-				    <div class="modal-body">
-				    	Seguro que quieres borrar este comentario ?
-				    </div>
-				    <div class="modal-footer">
-				      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-				      <form th:action="@{/borrarComentario}" method=get>
-				      	<button class="btn btn-danger">Si</button>
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					Seguro que quieres borrar este comentario ?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+					<form th:action="@{/borrarComentario}" method=get>
+						<button class="btn btn-danger">Si</button>
 						<input type="hidden" name="idEntrenador" th:value="${entrenador.get.idEntrenador}" />
-				      </form>
-				    </div>
-				  </div>
+					</form>
 				</div>
 			</div>
 		</div>
+	</div>
+	</div>
 
 	<!-- Footer -->
 	<div class="footer-basic" style="color: black;">
