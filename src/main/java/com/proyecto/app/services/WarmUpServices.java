@@ -183,20 +183,7 @@ public class WarmUpServices {
 				}
 			}
 			
-			if(tipo.equals("datUsuarioMod")) {
-				
-				if (cookie.getName().equals("datUsuarioMod")) {
-
-					cookie.setMaxAge(0);
-					response.addCookie(cookie);
-				}
-			}
-
 		}
-		// Cookie cookie = new Cookie("idRutina", null);
-		// cookie.setPath("/");
-		// cookie.setMaxAge(0);
-		// response.addCookie(cookie);
 	}
 
 	// Function to save Trainer
@@ -235,7 +222,7 @@ public class WarmUpServices {
 	}
 
 	// Function to save data user profile
-	public void editUserDataProfile(String nombre, String apellidos, String email, String clave, String descripcion,
+	public void editUserDataProfile(String nombre, String apellidos, String clave, String descripcion,
 			Users usuario) {
 
 		if (descripcion == null || descripcion.equals("")) {
@@ -244,14 +231,12 @@ public class WarmUpServices {
 
 				usuario.setNombre(nombre);
 				usuario.setApellidos(apellidos);
-				usuario.setEmail(email);
 				usuarioRepo.save(usuario);
 			} else {
 
 				String claveCifrada = passwordEncoder.encode(clave);
 				usuario.setNombre(nombre);
 				usuario.setApellidos(apellidos);
-				usuario.setEmail(email);
 				usuario.setClave(claveCifrada);
 				usuarioRepo.save(usuario);
 			}
@@ -265,10 +250,8 @@ public class WarmUpServices {
 
 					usuario.setNombre(nombre);
 					usuario.setApellidos(apellidos);
-					usuario.setEmail(email);
 					entrenador.get().setNombre(nombre);
 					entrenador.get().setApellidos(apellidos);
-					entrenador.get().setEmail(email);
 					entrenador.get().setDescripcion(descripcion);
 					entrenRepo.save(entrenador.get());
 					usuarioRepo.save(usuario);
@@ -277,11 +260,9 @@ public class WarmUpServices {
 					String claveCifrada = passwordEncoder.encode(clave);
 					usuario.setNombre(nombre);
 					usuario.setApellidos(apellidos);
-					usuario.setEmail(email);
 					usuario.setClave(claveCifrada);
 					entrenador.get().setNombre(nombre);
 					entrenador.get().setApellidos(apellidos);
-					entrenador.get().setEmail(email);
 					entrenador.get().setClave(claveCifrada);
 					entrenador.get().setDescripcion(descripcion);
 					entrenRepo.save(entrenador.get());
