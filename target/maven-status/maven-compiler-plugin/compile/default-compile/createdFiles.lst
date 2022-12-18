@@ -1,3 +1,4 @@
+com\proyecto\app\controllers\ConfigurationController.class
 com\proyecto\app\controllers\TrainersController.class
 com\proyecto\app\Repositories\CommentsRepository.class
 com\proyecto\app\services\UserService.class
@@ -16,6 +17,7 @@ com\proyecto\app\model\Users.class
 com\proyecto\app\classes\CommentForm.class
 com\proyecto\app\classes\LoginForm.class
 com\proyecto\app\model\Routines.class
+com\proyecto\app\classes\EditProfileForm.class
 com\proyecto\app\controllers\PaymentController.class
 com\proyecto\app\services\WarmUpServices.class
 com\proyecto\app\Repositories\TrainersRepository.class

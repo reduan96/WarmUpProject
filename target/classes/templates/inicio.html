@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
+
 <head>
 	<meta charset="utf-8">
 	<title>WarmUp - inicio</title>
@@ -8,99 +9,159 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	<link rel="stylesheet" href="css/style.css">
+	<style>
+		.bc-banner {
+			position: relative;
+			border: 1px solid #ccc;
+			overflow: hidden;
+		}
+
+		.bc-banner-header {
+			background-color: #fff;
+			position: relative;
+			z-index: 2;
+			padding: 1rem;
+		}
+
+		.bc-banner-body {
+			position: relative;
+			z-index: 2;
+			padding: 2rem;
+		}
+
+		.bc-banner .bc-banner-cover {
+			position: absolute;
+			opacity: 0.3;
+			filter: alpha(opacity=30);
+			/* For IE8 and earlier */
+			object-fit: cover;
+			top: 0;
+			z-index: 1;
+			height: 100%;
+			width: 100%;
+		}
+	</style>
 </head>
+
 <body>
 	<!-- Menu de navegacion -->
 	<nav class="navbar navbar-expand-xl navbar-white bg-white align-items-end">
 		<img alt="logo" src="images/logo.png" style="max-width:30%;" class="img-fluid">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="fa fa-bars" style="font-size:2rem"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarsExample03">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link text-dark" th:href="@{/}" style="font-size:1.3rem;">Inicio<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" th:href="@{/rutinas}" style="font-size:1.3rem;">Rutinas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" th:href="@{/entrenadores}" style="font-size:1.3rem;">Entrenadores</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" th:href="@{/altaPro}" style="font-size:1.3rem;">Pro</a>
-          </li>
-          <li class="nav-item dropdown mb-2">
-            <a class="nav-link dropdown-toggle text-dark" href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:1.3rem;">Mi perfil</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown03">
-              <a class="dropdown-item text-dark" th:href="@{/misRutinas}" style="font-size: 1.3rem;">Mis Rutinas</a>
-              <a class="dropdown-item text-dark" th:href="@{/config}" style="font-size:1.3rem;">Configuración</a>
-              <form th:action="@{/logout}" method=post><button class="dropdown-item text-dark" style="font-size:1.3rem;">Cerrar sesión</button></form>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <!-- Menu de navegacion -->
-    </nav>
-    <div class="w-100 justify-content-left bg-white">
-    	<p class="m-0 p-0 pl-4" style="font-weight:bold; font-size:1.4rem; color:black" >WARM-UP</p>
-    </div>
-    
-    <!-- Mensaje -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03"
+			aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="fa fa-bars" style="font-size:2rem"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarsExample03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link text-dark" th:href="@{/}" style="font-size:1.3rem;">Inicio<span
+							class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark" th:href="@{/rutinas}" style="font-size:1.3rem;">Rutinas</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark" th:href="@{/entrenadores}" style="font-size:1.3rem;">Entrenadores</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark" th:href="@{/altaPro}" style="font-size:1.3rem;">Pro</a>
+				</li>
+				<li class="nav-item dropdown mb-2">
+					<a class="nav-link dropdown-toggle text-dark" href="http://example.com" id="dropdown03"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:1.3rem;">Mi
+						perfil</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown03">
+						<a class="dropdown-item text-dark" th:href="@{/misRutinas}" style="font-size: 1.3rem;">Mis
+							Rutinas</a>
+						<a class="dropdown-item text-dark" th:href="@{/config}"
+							style="font-size:1.3rem;">Configuración</a>
+						<form th:action="@{/logout}" method=post><button class="dropdown-item text-dark"
+								style="font-size:1.3rem;">Cerrar sesión</button></form>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<!-- Menu de navegacion -->
+	</nav>
+	<div class="w-100 justify-content-left bg-white">
+		<p class="m-0 p-0 pl-4" style="font-weight:bold; font-size:1.4rem; color:black">WARM-UP</p>
+	</div>
+
+	<!-- Mensaje -->
 	<div class="w-100 d-flex bg-white justify-content-center">
-		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
-			th:if="${mensaje != null}"
-	     	th:text="${mensaje}"
-	     	class="alert">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
 		</div>
 	</div>
-    
-    <!-- Cuerpo -->
-    <div class="w-100 position-relative overflow-hidden p-3 p-md-5 text-center text-dark bg-white">
-  		<div class="col-md-5 p-lg-5 mx-auto my-5">
-    		<h1 class="display-8 font-weight-thin">No pierdes hasta que dejas de intentarlo - Mike Ditka.</h1>
-    		<p class="lead font-weight-thin">
-    		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore 
-    		et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
-    		aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    		cillum dolore eu fugiat nulla pariatur
-    		</p>
-  		</div>
-  		<div class="product-device shadow-sm d-none d-md-block"></div>
-  		<div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
-	</div>
-	
-    	<div class="container-fluid p-0 m-0">
-        	<img src="images/home.jpg" class="img-fluid">
-    	</div>
-	
+
+	<!-- Cuerpo -->
 	<div class="w-100 position-relative overflow-hidden p-3 p-md-5 text-center text-dark bg-white">
-  		<div class="col-md-5 p-lg-5 mx-auto my-5">
-    		<h4 class="lead font-weight-thin">
-    		Crea, comparte, relacionate y contacta con los mejores profesionales del deporte
-    		</h4>
-  		</div>
-  		<div class="product-device shadow-sm d-none d-md-block"></div>
-  		<div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+		<div class="col-md-5 p-lg-5 mx-auto my-5">
+			<h1 class="display-8 font-weight-thin">No pierdes hasta que dejas de intentarlo - Mike Ditka.</h1>
+			<p class="lead font-weight-thin">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+				et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+				aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur
+			</p>
+		</div>
+		<div class="product-device shadow-sm d-none d-md-block"></div>
+		<div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
 	</div>
-	
-    <!-- Cuerpo -->
-    
-    <!-- Footer -->
-    <div class="footer-basic" style="color:black;">
-        <footer>
-            <div class="social">
-            	<a href="#"><i class="icon ion-social-instagram"></i></a>
-            	<a href="#"><i class="icon ion-social-twitter"></i></a>
-            	<a href="#"><i class="icon ion-social-facebook"></i></a>
-            </div>
-            <p class="copyright">Warm Up © 2022</p>
-        </footer>
-    </div>
-    
+
+	<div class="container-fluid p-0 m-0">
+		<img src="images/home.jpg" class="img-fluid">
+	</div>
+
+	<div class="w-100 position-relative overflow-hidden p-3 p-md-5 text-center text-dark bg-white">
+		<div class="col-md-5 p-lg-5 mx-auto my-5">
+			<h4 class="lead font-weight-thin">
+				Crea, comparte, relacionate y contacta con los mejores profesionales del deporte
+			</h4>
+		</div>
+		<div class="product-device shadow-sm d-none d-md-block"></div>
+		<div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+	</div>
+
+	<!-- Cuerpo -->
+
+
+
+	<!-- Banner ads -->
+	<div class="bc-banner text-center">
+		<div class="bc-banner-header">
+			<h2>Some ads</h2>
+		</div>
+		<div class="bc-banner-body text-dark">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+				et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+				aliquip
+				ex ea commodo consequat.</p>
+			<button class="btn btn-primary">Lorem ipsum</button>
+		</div>
+		<img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Anima%C3%A7%C3%A3o_ilustrando_equidecomponibilidade.gif"
+			class="bc-banner-cover img-responsive">
+	</div>
+	<!-- Banner ads -->
+
+
+
+	<!-- Footer -->
+	<div class="footer-basic" style="color:black;">
+		<footer>
+			<div class="social">
+				<a href="#"><i class="icon ion-social-instagram"></i></a>
+				<a href="#"><i class="icon ion-social-twitter"></i></a>
+				<a href="#"><i class="icon ion-social-facebook"></i></a>
+			</div>
+			<p class="copyright">Warm Up © 2022</p>
+		</footer>
+	</div>
+
 	<script src="js/jquery.min.js"></script>
 	<script src="js/popper.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/main.js"></script>
 </body>
+
 </html>

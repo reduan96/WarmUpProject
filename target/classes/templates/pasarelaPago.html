@@ -93,95 +93,107 @@
 	<div class="w-100 justify-content-left bg-white">
 		<p class="m-0 p-0 pl-4" style="font-weight:bold; font-size:1.4rem; color:black">WARM-UP</p>
 	</div>
+	
+	<!-- Mensaje -->
+	<div class="w-100 d-flex bg-white justify-content-center">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
+		</div>
+	</div>
 
 	<!-- Cuerpo -->
 	<div class="bg-white pr-4 pl-4 w-100 pt-3">
-		<div class="card">
-			<div class="card-header">
-				<h3>Tarjeta de Credito</h3>
-				<h5>Introduzca los datos de su tarjeta para realizar el pago de la suscripcion</h5>
-			</div>
-			<div class="card-body">
-				<div class="row">
-					<div class="col-sm-12">
-						<div class="form-group">
-							<label for="name">Nombre en la tarjeta</label>
-							<input class="w-100" name="cardName" id="name" type="text" placeholder="nombre que figura en la tarjeta" required>
+		<form th:action="@{/pagoRealizado}" method="post">
+			<div class="card">
+				<div class="card-header">
+					<h3>Tarjeta de Credito</h3>
+					<h5>Introduzca los datos de su tarjeta para realizar el pago de la suscripcion</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label for="name">Nombre en la tarjeta</label>
+								<input required class="w-100" name="cardName" id="name" type="text"
+									placeholder="nombre que figura en la tarjeta" />
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div>
 					<div>
-						<div class="form-group">
-							<label for="ccnumber">Numero de la tarjeta de credito</label>
+						<div>
+							<div class="form-group">
+								<label for="ccnumber">Numero de la tarjeta de credito</label>
 
-							<div class="input-group w-100">
-								<input class="w-75" name="cardNumber" type="text" placeholder="0000 0000 0000 0000" autocomplete="email" required>
-								<div class="input-group-append">
-									<span class="input-group-text">
-										<i class="mdi mdi-credit-card"></i>
-									</span>
+								<div class="input-group w-100">
+									<input required class="w-75" name="cardNumber" type="number"
+										placeholder="0000 0000 0000 0000" minlength="16" maxlength="16" />
+									<div class="input-group-append">
+										<span class="input-group-text">
+											<i class="mdi mdi-credit-card"></i>
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="row">
-					<div class="form-group col-sm-4">
-						<label for="ccmonth">Mes</label>
-						<select class="w-100" name="cardMonth" id="ccmonth">
-							<option selected>1</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-							<option>5</option>
-							<option>6</option>
-							<option>7</option>
-							<option>8</option>
-							<option>9</option>
-							<option>10</option>
-							<option>11</option>
-							<option>12</option>
-						</select>
-					</div>
-					<div class="form-group col-sm-4">
-						<label for="ccyear">Año</label>
-						<select class="w-100" name="cardYear" id="ccyear">
-							<option selected>2022</option>
-							<option>2023</option>
-							<option>2024</option>
-							<option>2025</option>
-							<option>2026</option>
-							<option>2027</option>
-							<option>2028</option>
-							<option>2029</option>
-							<option>2030</option>
-							<option>2031</option>
-							<option>2032</option>
-							<option>2033</option>
-						</select>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="cvv">CVV/CVC</label>
-							<input class="w-100" name="cardCvv" id="cvv" type="text" placeholder="123" required>
+					<div class="row">
+						<div class="form-group col-sm-4">
+							<label for="ccmonth">Mes</label>
+							<select class="w-100" name="cardMonth" id="ccmonth">
+								<option selected>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+								<option>9</option>
+								<option>10</option>
+								<option>11</option>
+								<option>12</option>
+							</select>
+						</div>
+						<div class="form-group col-sm-4">
+							<label for="ccyear">Año</label>
+							<select class="w-100" name="cardYear" id="ccyear">
+								<option selected>2022</option>
+								<option>2023</option>
+								<option>2024</option>
+								<option>2025</option>
+								<option>2026</option>
+								<option>2027</option>
+								<option>2028</option>
+								<option>2029</option>
+								<option>2030</option>
+								<option>2031</option>
+								<option>2032</option>
+								<option>2033</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="cvv">CVV/CVC</label>
+								<input required class="w-100" name="cardCvv" id="cvv" type="number" placeholder="123"
+								minlength="3" maxlength="3" />
+							</div>
 						</div>
 					</div>
-				</div>
 
-			</div>
-			<div class="card-footer" style="background-color: white">
-				<div class="row justify-content-center">
-					<form th:action="@{/altaPro}" method="get">
-						<button class="btn btn-light btn-lg m-2">Volver</button>
-					</form>
-					<form th:action="@{/pagoRealizado}" method="get">
-						<button class="btn btn-light btn-lg m-2">Pagar</button>
-					</form>
+				</div>
+				<div class="card-footer" style="background-color: white">
+					<div class="row justify-content-center">
+						<button type="submit" class="btn btn-light btn-lg m-2">Pagar</button>
+					</div>
 				</div>
 			</div>
+		</form>
+		<div class="d-flex flex-wrap justify-content-center p-2 bg-white">
+			<form th:action="@{/altaPro}" method="get">
+				<button class="btn btn-light btn-lg m-2">Volver</button>
+			</form>
 		</div>
 	</div>
 	<!-- Cuerpo -->

@@ -9,6 +9,38 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	<link rel="stylesheet" href="css/style.css">
+	<style>
+		.bc-banner {
+			position: relative;
+			border: 1px solid #ccc;
+			overflow: hidden;
+		}
+
+		.bc-banner-header {
+			background-color: #fff;
+			position: relative;
+			z-index: 2;
+			padding: 1rem;
+		}
+
+		.bc-banner-body {
+			position: relative;
+			z-index: 2;
+			padding: 2rem;
+		}
+
+		.bc-banner .bc-banner-cover {
+			position: absolute;
+			opacity: 0.3;
+			filter: alpha(opacity=30);
+			/* For IE8 and earlier */
+			object-fit: cover;
+			top: 0;
+			z-index: 1;
+			height: 100%;
+			width: 100%;
+		}
+	</style>
 </head>
 
 <body>
@@ -64,9 +96,9 @@
 
 	<!-- Cuerpo -->
 	<div class="d-flex flex-wrap justify-content-center p-2 bg-white">
-			<h3>CONVIERTETE EN TODO UN PROFESIONAL DEL DEPORTE</h3>
+		<h3>Conviertete en todo un profesional del deporte</h3>
 	</div>
-	
+
 	<div class="w-100 pt-2 bg-white">
 
 		<div class="card-body">
@@ -117,11 +149,29 @@
 		</div>
 
 		<div class="w-100 d-flex justify-content-center bg-white">
-			<form th:action="@{/rutinas}" method="get"><button class="btn btn-light btn-lg m-2">Volver</button></form>
+			<form th:action="@{/rutinas}" method="get"><button class="btn btn-light btn-lg m-2 mb-5">Volver</button>
+			</form>
 		</div>
 
 	</div>
 	<!-- Cuerpo -->
+
+	<!-- Banner ads -->
+	<div class="bc-banner text-center">
+		<div class="bc-banner-header">
+			<h2>Some ads</h2>
+		</div>
+		<div class="bc-banner-body text-dark">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+				et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+				aliquip
+				ex ea commodo consequat.</p>
+			<button class="btn btn-primary">Lorem ipsum</button>
+		</div>
+		<img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Anima%C3%A7%C3%A3o_ilustrando_equidecomponibilidade.gif"
+			class="bc-banner-cover img-responsive">
+	</div>
+	<!-- Banner ads -->
 
 	<!-- Footer -->
 	<div class="footer-basic" style="color:black;">

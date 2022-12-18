@@ -77,6 +77,16 @@ public class RoutinesController {
 			SecurityContextHolder.getContext().setAuthentication(null);
 			return REDIRECT + "/login?logout";
 		}
+		
+		Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+		List<Routines> listaRutinas = rutinasRepo.findRoutinesByUserId(usuario.get().getIdUsuario());
+		
+		if(listaRutinas.size() == 10) {
+			
+			redirectAttrs.addFlashAttribute("mensaje", "Tiene subidas un maximo de 10 rutinas, "
+					+ "borre una para subir la nueva").addFlashAttribute("clase", "danger");
+			return REDIRECT + "/misRutinas";
+		}
 
 		return "subirRutina";
 	}
