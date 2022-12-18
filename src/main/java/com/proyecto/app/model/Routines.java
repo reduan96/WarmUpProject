@@ -1,7 +1,5 @@
 package com.proyecto.app.model;
 
-import java.util.ArrayList;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -26,7 +24,6 @@ public class Routines {
 	private String viernes;
 	private String sabado;
 	private String domingo;
-	private ArrayList<Comments> comentarios;
 	
 	public Routines(String idUsuario, String nombre, String descripcion, String lunes, String martes, String miercoles,
 			String jueves, String viernes, String sabado, String domingo) {

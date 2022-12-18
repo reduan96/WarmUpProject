@@ -1,7 +1,5 @@
 package com.proyecto.app.model;
 
-import java.util.ArrayList;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,8 +20,6 @@ public class Trainers {
 	private String email;
 	private String clave;
 	private String descripcion;
-	private ArrayList<Comments> comentarios;
-	private ArrayList<Payments> pagosRealizados;
 	
 	
 	public Trainers(String idUsuario, String nombre, String apellidos, String email,

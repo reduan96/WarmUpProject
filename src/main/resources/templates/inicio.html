@@ -48,10 +48,8 @@
     
     <!-- Mensaje -->
 	<div class="w-100 d-flex bg-white justify-content-center">
-		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
-			th:if="${mensaje != null}"
-	     	th:text="${mensaje}"
-	     	class="alert">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
 		</div>
 	</div>
     
