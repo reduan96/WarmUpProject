@@ -9,6 +9,38 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	<link rel="stylesheet" href="css/style.css">
+	<style>
+		.bc-banner {
+			position: relative;
+			border: 1px solid #ccc;
+			overflow: hidden;
+		}
+
+		.bc-banner-header {
+			background-color: #fff;
+			position: relative;
+			z-index: 2;
+			padding: 1rem;
+		}
+
+		.bc-banner-body {
+			position: relative;
+			z-index: 2;
+			padding: 2rem;
+		}
+
+		.bc-banner .bc-banner-cover {
+			position: absolute;
+			opacity: 0.3;
+			filter: alpha(opacity=30);
+			/* For IE8 and earlier */
+			object-fit: cover;
+			top: 0;
+			z-index: 1;
+			height: 100%;
+			width: 100%;
+		}
+	</style>
 </head>
 
 <body>
@@ -28,14 +60,15 @@
 				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/entrenadores}"
 						style="font-size: 1.3rem;">Entrenadores</a>
 				</li>
-				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}" style="font-size: 1.3rem;">Pro</a>
+				<li class="nav-item"><a class="nav-link text-dark" th:href="@{/altaPro}"
+						style="font-size: 1.3rem;">Pro</a>
 				</li>
 				<li class="nav-item dropdown mb-2"><a class="nav-link dropdown-toggle text-dark"
 						href="http://example.com" id="dropdown03" data-toggle="dropdown" aria-haspopup="true"
 						aria-expanded="false" style="font-size: 1.3rem;">Mi perfil</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown03">
-						<a class="dropdown-item text-dark" th:href="@{/misRutinas}"
-							style="font-size: 1.3rem;">Mis Rutinas</a>
+						<a class="dropdown-item text-dark" th:href="@{/misRutinas}" style="font-size: 1.3rem;">Mis
+							Rutinas</a>
 						<a class="dropdown-item text-dark" th:href="@{/config}"
 							style="font-size: 1.3rem;">Configuración</a>
 						<form th:action="@{/logout}" method=post>
@@ -51,45 +84,57 @@
 		<p class="m-0 p-0 pl-4" style="font-weight:bold; font-size:1.4rem; color:black">WARM-UP</p>
 	</div>
 
-	<!-- Cuerpo -->
-	
-	<div class="d-flex flex-wrap justify-content-center p-2 bg-white">
-			<h3>AQUI TENDRAS LOS MEJORES PREPARADORES FISICOS</h3>
+	<!-- Mensaje -->
+	<div class="w-100 d-flex bg-white justify-content-center">
+		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+			th:text="${mensaje}" class="alert">
+		</div>
 	</div>
-	
+
+	<!-- Cuerpo -->
+
+	<div class="d-flex flex-wrap justify-content-center p-2 bg-white">
+		<h3>Busca un entrenador, asesoramiento fitness online</h3>
+	</div>
+
 	<div class="bg-white w-100">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg text-center shadow p-3 m-3 bg-white rounded">
-				<div class="m-2 p-0" style="text-align: center;">
-					<div class="card-body">
-					<img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-						<h5 class="card-title">Augusto</h5>
-						<p class="card-text" style="color:black;"> Entrenador especializado en resistencia....</p>
-						<form th:action="@{/infoEntrenador}" method=get>
-							<button class="btn btn-light btn-lg m-2">Contactar</button>
-							<input type="hidden" name="idUsuario" id="idUsuario" />
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg text-center shadow p-3 m-3 bg-white rounded">
-				<div class="m-2 p-0" style="text-align: center;">
-					<div class="card-body">
-					<img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-						<h5 class="card-title">Fernando</h5>
-						<p class="card-text" style="color:black;"> Entrenador especializado en hipertrofia muscular....</p>
-						<form th:action="@{/infoEntrenador}" method=get>
-							<button class="btn btn-light btn-lg m-2">Contactar</button>
-							<input type="hidden" name="idUsuario" id="idUsuario" />
-						</form>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg text-center shadow p-3 m-3 bg-white rounded" th:each="entrenador : ${entrenadores}">
+					<div class="m-2 p-0" style="text-align: center;">
+						<div class="card-body">
+							<img class="rounded-circle mt-5" width="100px"
+								src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+							<h5 class="card-title" th:text="${entrenador.nombre}"></h5>
+							<p class="card-text" style="color:black;" th:text="${entrenador.descripcion}"></p>
+							<form th:action="@{/infoEntrenador}" method=get>
+								<button class="btn btn-light btn-lg m-2">Mas info</button>
+								<input type="hidden" name="idEntrenador" th:value="${entrenador.idEntrenador}" />
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	</div>
 	<!-- Cuerpo -->
+
+	<!-- Banner ads -->
+	<div class="bc-banner text-center">
+		<div class="bc-banner-header">
+			<h2>Some ads</h2>
+		</div>
+		<div class="bc-banner-body text-dark">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+				et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+				aliquip
+				ex ea commodo consequat.</p>
+			<button class="btn btn-primary">Lorem ipsum</button>
+		</div>
+		<img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Anima%C3%A7%C3%A3o_ilustrando_equidecomponibilidade.gif"
+			class="bc-banner-cover img-responsive">
+	</div>
+	<!-- Banner ads -->
 
 	<!-- Footer -->
 	<div class="footer-basic" style="color: black;">
