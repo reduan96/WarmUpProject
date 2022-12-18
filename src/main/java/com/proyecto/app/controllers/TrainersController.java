@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -51,7 +52,8 @@ public class TrainersController {
 		wUpService.resetCookie(request, response, "idEntrenador");
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		model.addAttribute("entrenadores", entrenRepo.findAll());
@@ -66,7 +68,8 @@ public class TrainersController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		if (idEntrenadorCookie != null && !"".equals(idEntrenadorCookie)) {
@@ -105,7 +108,7 @@ public class TrainersController {
 				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
 			} else {
 
-				model.addAttribute("mediaPuntuacion", "Aun sin puntuación");
+				model.addAttribute("mediaPuntuacion", "Comenta!");
 			}
 			// Show rest of comments
 			List<Comments> comentariosDist = new ArrayList<>();
@@ -156,7 +159,7 @@ public class TrainersController {
 				model.addAttribute("mediaPuntuacion", mediaPuntuaciones.toString());
 			} else {
 
-				model.addAttribute("mediaPuntuacion", "Aun sin puntuación");
+				model.addAttribute("mediaPuntuacion", "Comenta!");
 			}
 			// Show rest of comments
 			List<Comments> comentariosDist = new ArrayList<>();

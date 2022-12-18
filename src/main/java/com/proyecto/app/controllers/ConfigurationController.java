@@ -1,19 +1,24 @@
 package com.proyecto.app.controllers;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.proyecto.app.Repositories.CommentsRepository;
 import com.proyecto.app.Repositories.TrainersRepository;
 import com.proyecto.app.Repositories.UsersRepository;
 import com.proyecto.app.classes.EditProfileForm;
+import com.proyecto.app.model.Comments;
 import com.proyecto.app.model.Trainers;
 import com.proyecto.app.model.Users;
 import com.proyecto.app.services.WarmUpServices;
@@ -29,6 +34,9 @@ public class ConfigurationController {
 
 	@Autowired
 	private UsersRepository usuarioRepo;
+
+	@Autowired
+	private CommentsRepository comentRepo;
 
 	private static final String REDIRECT = "redirect:";
 
@@ -47,9 +55,10 @@ public class ConfigurationController {
 
 			redirectAttrs.addFlashAttribute("mensaje", "Usuario inexistente en BD, contacte con soporte")
 					.addFlashAttribute("clase", "danger");
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
-		
+
 		model.addAttribute("usuario", usuario.get());
 		Optional<Trainers> entrenador = entrenRepo.findTrainersByUserId(usuario.get().getIdUsuario());
 		if (entrenador.isPresent()) {
@@ -75,7 +84,8 @@ public class ConfigurationController {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
-			return REDIRECT + "login";
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
 		}
 
 		String nombre = editProfileForm.getNombre();
@@ -113,7 +123,7 @@ public class ConfigurationController {
 
 			} else {
 
-				if (nombre == null || nombre.equals("") || apellidos == null || apellidos.equals("") 
+				if (nombre == null || nombre.equals("") || apellidos == null || apellidos.equals("")
 						|| descripcion == null || descripcion.equals("")) {
 
 					redirectAttrs.addFlashAttribute("mensaje", "Campo/s nulo/s").addFlashAttribute("clase", "danger");
@@ -141,4 +151,66 @@ public class ConfigurationController {
 		return null;
 	}
 
+	// Delete Trainer
+	@GetMapping("/bajaEntrenador")
+	public String deleteTrainer(HttpServletRequest request, RedirectAttributes redirectAttrs,
+			Principal principal) {
+
+		String emailUsuario = principal.getName();
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
+		}
+
+		Optional<Users> usuario = usuarioRepo.findByEmail(emailUsuario);
+		Optional<Trainers> entrenador = entrenRepo.findTrainersByUserId(usuario.get().getIdUsuario());
+		
+		if(entrenador.isEmpty()) {
+			
+			return REDIRECT + "/error";
+		}
+
+		List<Comments> comentarios = comentRepo.findCommentsByIdTrainer(entrenador.get().getIdEntrenador());
+		for (Comments comentario : comentarios) {
+			comentRepo.deleteById(comentario.getIdComentario());
+		}
+		entrenRepo.deleteById(entrenador.get().getIdEntrenador());
+		redirectAttrs.addFlashAttribute("mensaje", "Dado de baja como entrenador, todavia puede iniciar sesion como usuario")
+		.addFlashAttribute("clase", "danger");
+		SecurityContextHolder.getContext().setAuthentication(null);
+		return REDIRECT + "/login?logout";
+
+	}
+	
+	// delete user from system, like user or trainer
+	@GetMapping("/bajaUsuario")
+	public String deleteUser(HttpServletRequest request, RedirectAttributes redirectAttrs,
+			Principal principal) {
+		
+		String emailUsuario = principal.getName();
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
+		}
+		
+		Optional<Users> usuario = usuarioRepo.findByEmail(emailUsuario);
+		Optional<Trainers> entrenador = entrenRepo.findTrainersByUserId(usuario.get().getIdUsuario());
+		if(entrenador.isPresent()) {
+			
+			List<Comments> comentarios = comentRepo.findCommentsByIdTrainer(entrenador.get().getIdEntrenador());
+			for (Comments comentario : comentarios) {
+				comentRepo.deleteById(comentario.getIdComentario());
+			}
+			entrenRepo.deleteById(entrenador.get().getIdEntrenador());
+		}
+		usuarioRepo.deleteById(usuario.get().getIdUsuario());
+		redirectAttrs.addFlashAttribute("mensaje", "Sus datos han sido borrados del sistema, registrese de nuevo")
+		.addFlashAttribute("clase", "danger");
+		SecurityContextHolder.getContext().setAuthentication(null);
+		return REDIRECT + "/login?logout";
+	}
+
+	
 }
