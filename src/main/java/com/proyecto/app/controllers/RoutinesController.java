@@ -180,7 +180,7 @@ public class RoutinesController {
 		String sabado = routineForm.getSabado();
 		String domingo = routineForm.getDomingo();
 
-		log.info("idUsuario logueado: {}", idUsuario);
+		// log.info("idUsuario logueado: {}", idUsuario);
 
 		boolean flag = wUpService.checkUser(idUsuario);
 
