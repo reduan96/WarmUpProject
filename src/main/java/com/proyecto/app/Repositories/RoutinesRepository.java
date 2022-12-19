@@ -14,7 +14,4 @@ public interface RoutinesRepository extends MongoRepository<Routines, String> {
 	@Query("{idUsuario:'?0'}")
 	List<Routines> findRoutinesByUserId(String idUsuario);
 	
-	//@Query(value="{id:'?0'}", delete = true)
-	//void deleteRoutinesById(String id);
-	
 }

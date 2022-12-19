@@ -11,9 +11,6 @@ public interface UsersRepository extends MongoRepository<Users, String> {
 	Optional<Users> checkUser(String email, String clave);
 	
 	//@Query("{email:'?0'}")
-	//Optional<Usuarios> checkEmail(String email);
-	
-	//@Query("{email:'?0'}")
 	Optional<Users> findByEmail(String email);
 	
 	//@Query("{id:?0}")
