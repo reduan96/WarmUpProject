@@ -8,6 +8,6 @@ Lombok, u install the lombok.jar at eclipse folder - https://projectlombok.org/d
 
 and SpringBoot plugin at Eclipse's marketplace
 
-Optionally u can install MongoDD compass to see the database - https://www.mongodb.com/try/download/compass
+Optionally u can install MongoDB compass to see the database - https://www.mongodb.com/try/download/compass
 
 The url connection for mongoDB is on resources folder at application.properties, the DB is on a cluster at MongoDB Atlas
