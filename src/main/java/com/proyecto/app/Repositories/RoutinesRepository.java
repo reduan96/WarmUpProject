@@ -11,9 +11,6 @@ public interface RoutinesRepository extends MongoRepository<Routines, String> {
 	@Query("{nombre:'?0'}")
 	Optional<Routines> findByName(String nombre);
 	
-	//@Query("{fechaSubida:'-1'}")
-	//Optional<Rutinas> orderRecents();
-	
 	@Query("{idUsuario:'?0'}")
 	List<Routines> findRoutinesByUserId(String idUsuario);
 	

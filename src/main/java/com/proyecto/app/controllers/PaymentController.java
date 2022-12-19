@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.proyecto.app.Repositories.TrainersRepository;
 import com.proyecto.app.Repositories.UsersRepository;
 import com.proyecto.app.model.Trainers;
 import com.proyecto.app.model.Users;
@@ -28,6 +29,9 @@ public class PaymentController {
 	
 	@Autowired
 	private UsersRepository usuarioRepo;
+	
+	@Autowired
+	private TrainersRepository entrenRepo;
 
 	private static final String REDIRECT = "redirect:";
 
@@ -93,7 +97,7 @@ public class PaymentController {
 	// Payment finished controller
 	@PostMapping("/pagoRealizado")
 	public String paymentFinished(@CookieValue(name = "tarif", defaultValue = "") String tarifCookie,
-			HttpServletRequest request, RedirectAttributes redirectAttrs, Principal principal) {
+			HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
 		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
 
@@ -101,10 +105,16 @@ public class PaymentController {
 			return REDIRECT + "/login?logout";
 		}
 		
-		// Here we create the payment data and the trainer
-		// to show him/her data at trainers
-		String emailUsuario = principal.getName();
-		Optional<Users> usuario = usuarioRepo.findByEmail(emailUsuario);
+		Optional<Users> usuario = usuarioRepo.findByEmail(request.getUserPrincipal().getName());
+		Optional<Trainers> entrenadorExist = entrenRepo.findTrainersByUserId(usuario.get().getIdUsuario());
+		
+		if(entrenadorExist.isPresent()) {
+			
+			redirectAttrs
+			.addFlashAttribute("mensaje", "Usted ya esta dado de alta como entrenador")
+			.addFlashAttribute("clase", "danger");
+			return REDIRECT + "/entrenadores";
+		}
 		
 		if(usuario.isEmpty()) {
 			return REDIRECT + "/error";

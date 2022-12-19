@@ -1,7 +1,5 @@
 package com.proyecto.app.services;
-
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import javax.servlet.http.Cookie;
@@ -87,8 +85,9 @@ public class WarmUpServices {
 	// Function to save the user´s data and create him
 	public void saveUser(String nombre, String apellidos, String email, String clave) {
 
+		LocalDate ts = LocalDate.now();
 		String claveCifrada = passwordEncoder.encode(clave);
-		Users usuario = new Users(nombre, apellidos, email, claveCifrada);
+		Users usuario = new Users(nombre, apellidos, email, claveCifrada, ts);
 
 		usuarioRepo.save(usuario);
 	}
@@ -97,8 +96,9 @@ public class WarmUpServices {
 	public void registerRoutine(String idUsuario, String nombre, String descripcion, String lunes, String martes,
 			String miercoles, String jueves, String viernes, String sabado, String domingo) {
 
+		LocalDate ts = LocalDate.now();
 		Routines rutina = new Routines(idUsuario, nombre, descripcion, lunes, martes, miercoles, jueves, viernes,
-				sabado, domingo);
+				sabado, domingo, ts);
 
 		rutinaRepo.save(rutina);
 	}
@@ -132,13 +132,15 @@ public class WarmUpServices {
 	public void addCommentRoutine(String idUsuario, String idRutina, String idEntrenador, String puntuacion,
 			String comentario) {
 
+		LocalDate ts = LocalDate.now();
+		
 		if (idEntrenador == null) {
 
-			Comments comentarioObj = new Comments(idRutina, null, idUsuario, puntuacion, comentario);
+			Comments comentarioObj = new Comments(idRutina, null, idUsuario, puntuacion, comentario, ts);
 			comentRepo.save(comentarioObj);
 		} else {
 
-			Comments comentarioObj = new Comments(null, idEntrenador, idUsuario, puntuacion, comentario);
+			Comments comentarioObj = new Comments(null, idEntrenador, idUsuario, puntuacion, comentario, ts);
 			comentRepo.save(comentarioObj);
 		}
 
@@ -188,8 +190,9 @@ public class WarmUpServices {
 
 	// Function to save Trainer
 	public Trainers saveTrainer(String idUsuario, String nombre, String apellidos, String email, String clave) {
-
-		Trainers entrenador = new Trainers(idUsuario, nombre, apellidos, email, clave, null);
+		
+		LocalDate ts = LocalDate.now();
+		Trainers entrenador = new Trainers(idUsuario, nombre, apellidos, email, clave, null, ts);
 		entrenRepo.save(entrenador);
 
 		return entrenador;
@@ -198,7 +201,7 @@ public class WarmUpServices {
 	// Function to save Payment
 	public void savePayment(String idEntrenador, String tarif) {
 
-		Timestamp ts = Timestamp.from(Instant.now());
+		LocalDate ts = LocalDate.now();
 		Payments pago = new Payments(idEntrenador, tarif, ts);
 		pagoRepo.save(pago);
 

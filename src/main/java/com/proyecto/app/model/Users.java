@@ -1,5 +1,7 @@
 package com.proyecto.app.model;
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,13 +20,15 @@ public class Users {
 	private String apellidos;
 	private String email;
 	private String clave;
+	private LocalDate fechaAlta;
 	
-	public Users(String nombre, String apellidos, String email, String clave) {
+	public Users(String nombre, String apellidos, String email, String clave, LocalDate fechaAlta) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.email = email;
 		this.clave = clave;
+		this.fechaAlta = fechaAlta;
 	}
 	
 }
