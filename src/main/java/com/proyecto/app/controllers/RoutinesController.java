@@ -2,14 +2,21 @@ package com.proyecto.app.controllers;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +73,63 @@ public class RoutinesController {
 
 		model.addAttribute("rutinas", rutinasRepo.findAll());
 		return "rutinas";
+	}
+	
+	// Recent Routines
+	@GetMapping("/RutinasRecientes")
+	public String recentRoutines(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttrs, Model model) {
+		
+		wUpService.resetCookie(request, response, "idRutina");
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
+		}
+		
+		model.addAttribute("rutinas", rutinasRepo.findAll(Sort.by(Sort.Direction.DESC, "fechaSubida")));
+		model.addAttribute("mensaje", "Mas Recientes").addAttribute("clase", "info");
+		return "rutinas";
+		
+	}
+	
+	// Routines with more interaction
+	@GetMapping("/RutinasMasInteraccion")
+	public String moreIntRoutines(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttrs, Model model) {
+		
+		wUpService.resetCookie(request, response, "idRutina");
+		if (!wUpService.checkIfOnlineUserStillExistsOnDb(request, redirectAttrs)) {
+
+			SecurityContextHolder.getContext().setAuthentication(null);
+			return REDIRECT + "/login?logout";
+		}
+		
+		Map<Routines, Integer> rutinasConComentarios = new HashMap<Routines, Integer>();
+		List<Routines> rutinas = rutinasRepo.findAll();
+		for (Routines rutina : rutinas) {
+			
+			List<Comments> comentarios = comentRepo.findCommentsByIdRoutine(rutina.getIdRutina());
+			
+			rutinasConComentarios.put(rutina, comentarios.size());
+		}
+		
+		Map<Routines,Integer> rutinasConComentariosOrd =
+				rutinasConComentarios.entrySet().stream()
+			       .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+			       .collect(Collectors.toMap(
+			          Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		
+		List<Routines> rutinasOrd = new ArrayList<>();
+		for (Entry<Routines, Integer> rutina : rutinasConComentariosOrd.entrySet()) {
+			
+			rutinasOrd.add(rutina.getKey());
+		}
+		
+		
+		model.addAttribute("rutinas", rutinasOrd);
+		model.addAttribute("mensaje", "Top Comentadas").addAttribute("clase", "info");
+		return "rutinas";	
 	}
 
 	// Up Routines controller

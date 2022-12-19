@@ -1,5 +1,7 @@
 package com.proyecto.app.model;
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
@@ -21,15 +23,17 @@ public class Comments {
 	private String idUsuario;
 	private String puntuacion;
 	private String comentario;
+	private LocalDate fechaSubida;
 	
-	public Comments(String idRutina, String idEntrenador, 
-			String idUsuario, String puntuacion, String comentario) {
+	public Comments(String idRutina, String idEntrenador, String idUsuario, String puntuacion, String comentario,
+			LocalDate fechaSubida) {
 		super();
 		this.idRutina = idRutina;
 		this.idEntrenador = idEntrenador;
 		this.idUsuario = idUsuario;
 		this.puntuacion = puntuacion;
 		this.comentario = comentario;
+		this.fechaSubida = fechaSubida;
 	}
 	
 }

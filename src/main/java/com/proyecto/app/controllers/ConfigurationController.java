@@ -178,8 +178,7 @@ public class ConfigurationController {
 		entrenRepo.deleteById(entrenador.get().getIdEntrenador());
 		redirectAttrs.addFlashAttribute("mensaje", "Dado de baja como entrenador, todavia puede iniciar sesion como usuario")
 		.addFlashAttribute("clase", "danger");
-		SecurityContextHolder.getContext().setAuthentication(null);
-		return REDIRECT + "/login?logout";
+		return REDIRECT + "/config";
 
 	}
 	

@@ -1,6 +1,6 @@
 package com.proyecto.app.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,9 +18,9 @@ public class Payments {
 	
 	private String idEntrenador;
 	private String tarifa;
-	private Date fechaPago;
+	private LocalDate fechaPago;
 	
-	public Payments(String idEntrenador, String tarifa, Date fechaPago) {
+	public Payments(String idEntrenador, String tarifa, LocalDate fechaPago) {
 		super();
 		this.idEntrenador = idEntrenador;
 		this.tarifa = tarifa;

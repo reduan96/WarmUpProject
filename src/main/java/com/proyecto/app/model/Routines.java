@@ -1,5 +1,7 @@
 package com.proyecto.app.model;
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,9 +26,10 @@ public class Routines {
 	private String viernes;
 	private String sabado;
 	private String domingo;
+	private LocalDate fechaSubida;
 	
 	public Routines(String idUsuario, String nombre, String descripcion, String lunes, String martes, String miercoles,
-			String jueves, String viernes, String sabado, String domingo) {
+			String jueves, String viernes, String sabado, String domingo, LocalDate fechaSubida) {
 		super();
 		this.idUsuario = idUsuario;
 		this.nombre = nombre;
@@ -38,6 +41,7 @@ public class Routines {
 		this.viernes = viernes;
 		this.sabado = sabado;
 		this.domingo = domingo;
+		this.fechaSubida = fechaSubida;
 	}
 	
 }
