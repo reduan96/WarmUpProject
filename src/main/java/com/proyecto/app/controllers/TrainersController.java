@@ -79,7 +79,7 @@ public class TrainersController {
 			return REDIRECT + "/login?logout";
 		}
 		
-		model.addAttribute("entrenadores", entrenRepo.findAll(Sort.by(Sort.Direction.DESC, "fechaSubida")));
+		model.addAttribute("entrenadores", entrenRepo.findAll(Sort.by(Sort.Direction.DESC, "fechaAlta")));
 		model.addAttribute("mensaje", "Mas Recientes").addAttribute("clase", "info");
 		return "entrenadores";
 	}
